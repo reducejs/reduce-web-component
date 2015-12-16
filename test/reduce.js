@@ -1,4 +1,4 @@
-var test = require('tape')
+var test = require('tap').test
 var Reduce = require('../')
 var path = require('path')
 var fixtures = path.resolve.bind(path, __dirname)
