@@ -1,7 +1,6 @@
 var test = require('tap').test
 var collect = require('../lib/collectCssDeps')
 var collectCssDeps = collect.collectCssDeps
-var reduce = require('reduce-js')
 var path = require('path')
 
 test('getStyle', function(tt) {
@@ -40,13 +39,13 @@ test('getStyle', function(tt) {
       stream.write({
         file: '/component/a/index.js',
         deps: {
-          'b': '/component/b/index.js',
-          'c': '/component/c/index.js',
+          b: '/component/b/index.js',
+          c: '/component/c/index.js',
         },
       })
       stream.write({
         file: '/d.js',
-        deps: { 'b': '/component/b/index.js' },
+        deps: { b: '/component/b/index.js' },
       })
       stream.write({ file: '/e.js', deps: {} })
       stream.end()
