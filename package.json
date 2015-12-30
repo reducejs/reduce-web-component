@@ -1,5 +1,5 @@
 {
-  "name": "reduce-component",
+  "name": "reduce-web-component",
   "version": "0.0.1",
   "description": "Pack js and css files in web components",
   "main": "index.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zoubin/reduce-component.git"
+    "url": "git+https://github.com/zoubin/reduce-web-component.git"
   },
   "keywords": [
     "reduce",
@@ -24,9 +24,9 @@
   "author": "zoubin",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/zoubin/reduce-component/issues"
+    "url": "https://github.com/zoubin/reduce-web-component/issues"
   },
-  "homepage": "https://github.com/zoubin/reduce-component#readme",
+  "homepage": "https://github.com/zoubin/reduce-web-component#readme",
   "dependencies": {
     "mixy": "^1.0.0",
     "node-promisify": "^1.2.0",
