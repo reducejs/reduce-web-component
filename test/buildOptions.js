@@ -89,14 +89,11 @@ test('on', function(t) {
     on: { log: cb1, error: cb2 },
   })
 
-  t.same(options.js.on, {
-    log: [cb1],
-    error: [cb2],
-  })
-  t.same(options.css.on, {
-    log: [cb1],
-    error: [cb2],
-  })
+  t.same(options.js.on.log, [cb1])
+  t.same(options.js.on.error, [cb2])
+
+  t.same(options.css.on.log, [cb1])
+  t.same(options.css.on.error, [cb2])
 
   t.end()
 })

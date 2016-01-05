@@ -1,2 +1,5 @@
-@external "color";
-.earth {}
+@external "round";
+@import "helper/color";
+.earth {
+  color: $blue;
+}
