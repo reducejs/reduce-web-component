@@ -30,8 +30,8 @@
   "dependencies": {
     "mixy": "^1.0.0",
     "node-promisify": "^1.2.0",
-    "reduce-css": "^2.0.0",
-    "reduce-js": "^4.0.0",
+    "reduce-css": "^3.0.0",
+    "reduce-js": "^5.0.0",
     "through2": "^2.0.0"
   },
   "devDependencies": {
@@ -39,6 +39,6 @@
     "del": "^2.2.0",
     "eslint": "^1.10.1",
     "gulp": "^3.9.0",
-    "tap": "^2.3.1"
+    "tap": "^4.0.0"
   }
 }
