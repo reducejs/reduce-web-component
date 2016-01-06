@@ -4,6 +4,12 @@
 
 Pack js and css files from web components into bundles.
 
+**Features**
+
+* Use [`reduce-js`] and [`reduce-css`] to pack scripts and styles into common shared bundles.
+* Automatically pack styles together when their bounding scripts `require` each other.
+* Use [`postcss`] to preprocess styles by default.
+
 ## Example
 Create common shared bundles as well as page-specific ones.
 
