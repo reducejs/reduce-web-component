@@ -1,5 +1,5 @@
 var path = require('path')
-var fixtures = path.resolve.bind(path, __dirname, 'fixtures')
+var fixtures = path.resolve.bind(path, __dirname)
 var resolver = require('custom-resolve')
 var promisify = require('node-promisify')
 var styleResolve = promisify(resolver({
@@ -10,10 +10,10 @@ var styleResolve = promisify(resolver({
 
 module.exports = {
   getStyle: function (jsFile) {
-    if (jsFile.indexOf(fixtures('page') + '/') === 0) {
+    if (jsFile.indexOf(fixtures('src', 'page') + '/') === 0) {
       return path.dirname(jsFile) + '/index.css'
     }
-    var prefix = fixtures('web_modules') + '/'
+    var prefix = fixtures('src', 'web_modules') + '/'
     if (jsFile.indexOf(prefix) === 0) {
       return styleResolve(
         jsFile.slice(prefix.length).split('/')[0],
@@ -22,11 +22,10 @@ module.exports = {
     }
   },
 
-  basedir: fixtures(),
-  paths: [fixtures('web_modules')],
+  basedir: fixtures('src'),
+  paths: [fixtures('src', 'web_modules')],
 
   on: {
-    log: console.log.bind(console),
     error: function (err) {
       console.log(err.stack)
     },
@@ -38,7 +37,7 @@ module.exports = {
       groups: '**/page/**/index.js',
       common: 'common.js',
     },
-    dest: 'build',
+    dest: fixtures('build'),
   },
 
   css: {
@@ -48,7 +47,7 @@ module.exports = {
       common: 'common.css',
     },
     resolve: styleResolve,
-    dest: 'build',
+    dest: fixtures('build'),
   },
 }
 
