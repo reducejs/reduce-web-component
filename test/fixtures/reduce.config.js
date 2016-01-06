@@ -13,6 +13,7 @@ module.exports = {
     if (jsFile.indexOf(fixtures('src', 'page') + '/') === 0) {
       return path.dirname(jsFile) + '/index.css'
     }
+
     var prefix = fixtures('src', 'web_modules') + '/'
     if (jsFile.indexOf(prefix) === 0) {
       return styleResolve(

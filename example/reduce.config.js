@@ -1,5 +1,5 @@
 var path = require('path')
-var fixtures = path.resolve.bind(path, __dirname, 'fixtures')
+var fixtures = path.resolve.bind(path, __dirname, 'src')
 var resolver = require('custom-resolve')
 var promisify = require('node-promisify')
 var styleResolve = promisify(resolver({
@@ -14,6 +14,14 @@ module.exports = {
       return path.dirname(jsFile) + '/index.css'
     }
     var prefix = fixtures('web_modules') + '/'
+    if (jsFile.indexOf(prefix) === 0) {
+      return styleResolve(
+        jsFile.slice(prefix.length).split('/')[0],
+        { filename: jsFile }
+      )
+    }
+
+    prefix = fixtures('node_modules') + '/'
     if (jsFile.indexOf(prefix) === 0) {
       return styleResolve(
         jsFile.slice(prefix.length).split('/')[0],

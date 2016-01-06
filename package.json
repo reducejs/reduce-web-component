@@ -4,7 +4,7 @@
   "description": "Pack js and css files in web components",
   "main": "index.js",
   "scripts": {
-    "test": "npm run lint && tap --cov test/*.js",
+    "test": "npm run lint && tap test/*.js",
     "lint": "eslint *.js 'lib/**/*.js' test/*.js bin/*.js",
     "coveralls": "COVERALLS_REPO_TOKEN=REPO_TOKEN npm test"
   },
@@ -15,8 +15,7 @@
   "keywords": [
     "reduce",
     "component",
-    "css",
-    "js",
+    "postcss",
     "browserify",
     "reduce-css",
     "reduce-js"
@@ -41,6 +40,6 @@
     "del": "^2.2.0",
     "eslint": "^1.10.1",
     "gulp": "^3.9.0",
-    "tap": "^4.0.0"
+    "tap": "^5.0.0"
   }
 }
