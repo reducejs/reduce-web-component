@@ -31,7 +31,7 @@
     "node-promisify": "^1.2.0",
     "reduce-css": "^3.0.0",
     "reduce-css-postcss": "^2.0.0",
-    "reduce-js": "^5.0.0",
+    "reduce-js": "^6.0.0",
     "through2": "^2.0.0"
   },
   "devDependencies": {
