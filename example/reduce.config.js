@@ -50,6 +50,7 @@ module.exports = {
   },
 
   css: {
+    entries: '**/page/**/index.css',
     atRuleName: 'external',
     bundleOptions: {
       groups: '**/page/**/index.css',
