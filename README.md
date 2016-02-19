@@ -1,6 +1,7 @@
 # reduce-web-component
 [![version](https://img.shields.io/npm/v/reduce-web-component.svg)](https://www.npmjs.org/package/reduce-web-component)
-[![status](https://travis-ci.org/zoubin/reduce-web-component.svg?branch=master)](https://travis-ci.org/zoubin/reduce-web-component)
+[![status](https://travis-ci.org/reducejs/reduce-web-component.svg)](https://travis-ci.org/reducejs/reduce-web-component)
+![node](https://img.shields.io/node/v/postcss-custom-url.svg)
 
 Pack js and css files from web components into bundles.
 
