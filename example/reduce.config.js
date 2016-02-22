@@ -41,7 +41,7 @@ module.exports = {
   },
 
   js: {
-    entries: 'page/**/*.js',
+    entries: 'page/**/index.js',
     bundleOptions: {
       groups: '**/page/**/index.js',
       common: 'common.js',
@@ -50,7 +50,7 @@ module.exports = {
   },
 
   css: {
-    entries: '**/page/**/index.css',
+    entries: 'page/**/index.css',
     atRuleName: 'external',
     bundleOptions: {
       groups: '**/page/**/index.css',
@@ -58,6 +58,11 @@ module.exports = {
     },
     resolve: styleResolve,
     dest: 'build',
+  },
+
+  watch: {
+    js: { entryGlob: 'page/**/index.js' },
+    css: { entryGlob: 'page/**/index.css' },
   },
 }
 
