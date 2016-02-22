@@ -7,7 +7,7 @@ module.exports = function (opts) {
   }
 
   bundler.watch = function (watchOpts) {
-    return new Watch(watchOpts).watch(opts)
+    return new Watch(watchOpts || opts && opts.watch).watch(opts)
   }
 
   return bundler
