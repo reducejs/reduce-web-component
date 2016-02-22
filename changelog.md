@@ -1,4 +1,10 @@
-<!-- 668974d 1455856832000 -->
+<!-- a9cbce9 1456130906000 -->
+
+## [v0.3.1](https://github.com/reducejs/reduce-web-component/commit/a9cbce9) (2016-02-22)
+
+* [[`3a90e08`](https://github.com/reducejs/reduce-web-component/commit/3a90e08)] Support setting watch options for js and css respectively
+
+* [[`722b16f`](https://github.com/reducejs/reduce-web-component/commit/722b16f)] changelog
 
 ## [v0.3.0](https://github.com/reducejs/reduce-web-component/commit/668974d) (2016-02-19)
 
