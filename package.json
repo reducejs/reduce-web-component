@@ -35,8 +35,7 @@
     "node-promisify": "^1.2.0",
     "reduce-css": "^4.0.0",
     "reduce-css-postcss": "^3.0.0",
-    "reduce-js": "^7.0.0",
-    "through2": "^2.0.0"
+    "reduce-js": "^7.0.0"
   },
   "devDependencies": {
     "compare-directory": "^1.0.1",

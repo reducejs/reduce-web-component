@@ -1,5 +1,7 @@
-var Reduce = require('./lib/reduce')
-var Watch = require('./lib/watch')
+'use strict'
+
+const Reduce = require('./lib/reduce')
+const Watch = require('./lib/watch')
 
 module.exports = function (opts) {
   function bundler() {

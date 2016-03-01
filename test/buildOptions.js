@@ -1,9 +1,11 @@
-var buildOptions = require('../lib/buildOptions')
-var test = require('tap').test
+'use strict'
+
+const buildOptions = require('../lib/buildOptions')
+const test = require('tap').test
 
 test('paths', function(tt) {
   tt.test('top', function(t) {
-    var options = buildOptions({
+    let options = buildOptions({
       paths: 'a',
     })
 
@@ -14,7 +16,7 @@ test('paths', function(tt) {
   })
 
   tt.test('cascading', function(t) {
-    var options = buildOptions({
+    let options = buildOptions({
       paths: ['a'],
       js: {
         paths: ['b'],
@@ -34,7 +36,7 @@ test('paths', function(tt) {
   })
 
   tt.test('style resolve', function(t) {
-    var options = buildOptions({
+    let options = buildOptions({
       paths: ['a'],
     })
 
@@ -48,7 +50,7 @@ test('paths', function(tt) {
 
 test('basedir', function(tt) {
   tt.test('top', function(t) {
-    var options = buildOptions({
+    let options = buildOptions({
       basedir: '/path/to/basedir',
     })
 
@@ -59,7 +61,7 @@ test('basedir', function(tt) {
   })
 
   tt.test('cascading', function(t) {
-    var options = buildOptions({
+    let options = buildOptions({
       basedir: '/path/to/basedir/a',
       js: {
         basedir: '/path/to/basedir/b',
@@ -82,10 +84,9 @@ test('basedir', function(tt) {
 })
 
 test('on', function(t) {
-  var cb1 = function () {}
-  var cb2 = function () {}
-
-  var options = buildOptions({
+  let cb1 = function () {}
+  let cb2 = function () {}
+  let options = buildOptions({
     on: { log: cb1, error: cb2 },
   })
 
