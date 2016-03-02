@@ -31,11 +31,13 @@
   },
   "homepage": "https://github.com/reducejs/reduce-web-component#readme",
   "dependencies": {
+    "browserify": "^13.0.0",
+    "depsify": "^4.0.0",
     "mixy": "^1.0.0",
     "node-promisify": "^1.2.0",
-    "reduce-css": "^4.0.0",
+    "reduce-css": "^5.0.0",
     "reduce-css-postcss": "^3.0.0",
-    "reduce-js": "^7.0.0"
+    "reduce-js": "^9.0.0"
   },
   "devDependencies": {
     "compare-directory": "^1.0.1",

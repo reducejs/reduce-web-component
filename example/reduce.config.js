@@ -30,8 +30,10 @@ module.exports = {
     }
   },
 
-  basedir: fixtures(),
-  paths: [fixtures('web_modules')],
+  reduce: {
+    basedir: fixtures(),
+    paths: [fixtures('web_modules')],
+  },
 
   on: {
     log: console.log.bind(console),
@@ -51,12 +53,14 @@ module.exports = {
 
   css: {
     entries: 'page/**/index.css',
-    atRuleName: 'external',
+    reduce: {
+      atRuleName: 'external',
+      resolve: styleResolve,
+    },
     bundleOptions: {
       groups: '**/page/**/index.css',
       common: 'common.css',
     },
-    resolve: styleResolve,
     dest: 'build',
   },
 

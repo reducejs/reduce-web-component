@@ -5,42 +5,40 @@ const test = require('tap').test
 
 test('paths', function(tt) {
   tt.test('top', function(t) {
-    let options = buildOptions({
-      paths: 'a',
-    })
+    let opts = { reduce: { paths: 'a' } }
+    let jsOpts = buildOptions.js(opts.js, opts)
+    let cssOpts = buildOptions.css(opts.css, opts)
 
-    t.same(options.js.reduce.paths, ['a'])
-    t.same(options.css.reduce.paths, ['a'])
+    t.same(jsOpts.reduce.paths, ['a'])
+    t.same(cssOpts.reduce.paths, ['a'])
 
     t.end()
   })
 
   tt.test('cascading', function(t) {
-    let options = buildOptions({
-      paths: ['a'],
+    let options = {
+      reduce: { paths: ['a'] },
       js: {
-        paths: ['b'],
-        reduce: {
-          paths: ['c'],
-        },
+        reduce: { paths: ['c'] },
       },
       css: {
-        paths: ['b'],
+        reduce: { paths: ['b'] },
       },
-    })
+    }
+    let jsOpts = buildOptions.js(options.js, options)
+    let cssOpts = buildOptions.css(options.css, options)
 
-    t.same(options.js.reduce.paths, ['c', 'b', 'a'])
-    t.same(options.css.reduce.paths, ['b', 'a'])
+    t.same(jsOpts.reduce.paths, ['c', 'a'])
+    t.same(cssOpts.reduce.paths, ['b', 'a'])
 
     t.end()
   })
 
   tt.test('style resolve', function(t) {
-    let options = buildOptions({
-      paths: ['a'],
-    })
+    let options = { reduce: { paths: ['a'] } }
+    let cssOpts = buildOptions.css(options.css, options)
 
-    t.same(options.css.reduce.resolve.paths, ['a'])
+    t.same(cssOpts.reduce.resolve.paths, ['a'])
 
     t.end()
   })
@@ -50,32 +48,26 @@ test('paths', function(tt) {
 
 test('basedir', function(tt) {
   tt.test('top', function(t) {
-    let options = buildOptions({
-      basedir: '/path/to/basedir',
-    })
+    let options = { reduce: { basedir: '/path/to/basedir' } }
+    let jsOpts = buildOptions.js(options.js, options)
+    let cssOpts = buildOptions.css(options.css, options)
 
-    t.equal(options.js.reduce.basedir, '/path/to/basedir')
-    t.equal(options.css.reduce.basedir, '/path/to/basedir')
+    t.equal(jsOpts.reduce.basedir, '/path/to/basedir')
+    t.equal(cssOpts.reduce.basedir, '/path/to/basedir')
 
     t.end()
   })
 
   tt.test('cascading', function(t) {
-    let options = buildOptions({
-      basedir: '/path/to/basedir/a',
+    let options = {
+      reduce: { basedir: '/path/to/basedir/a' },
       js: {
-        basedir: '/path/to/basedir/b',
-        reduce: {
-          basedir: '/path/to/basedir/c',
-        },
+        reduce: { basedir: '/path/to/basedir/c' },
       },
-      css: {
-        basedir: '/path/to/basedir/b',
-      },
-    })
+    }
+    let jsOpts = buildOptions.js(options.js, options)
 
-    t.equal(options.js.reduce.basedir, '/path/to/basedir/c')
-    t.equal(options.css.reduce.basedir, '/path/to/basedir/b')
+    t.equal(jsOpts.reduce.basedir, '/path/to/basedir/c')
 
     t.end()
   })
@@ -86,15 +78,17 @@ test('basedir', function(tt) {
 test('on', function(t) {
   let cb1 = function () {}
   let cb2 = function () {}
-  let options = buildOptions({
+  let options = {
     on: { log: cb1, error: cb2 },
-  })
+  }
+  let jsOpts = buildOptions.js(options.js, options)
+  let cssOpts = buildOptions.css(options.css, options)
 
-  t.same(options.js.on.log, [cb1])
-  t.same(options.js.on.error, [cb2])
+  t.same(jsOpts.on.log, [cb1])
+  t.same(jsOpts.on.error, [cb2])
 
-  t.same(options.css.on.log, [cb1])
-  t.same(options.css.on.error, [cb2])
+  t.same(cssOpts.on.log, [cb1])
+  t.same(cssOpts.on.error, [cb2])
 
   t.end()
 })
