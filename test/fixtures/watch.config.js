@@ -9,15 +9,15 @@ const styleResolve = promisify(resolver({
   extensions: '.css',
   moduleDirectory: ['web_modules', 'node_modules'],
 }))
-const Transform = require('stream').Transform
+const Clean = require('clean-remains')
 
 module.exports = {
   getStyle: function (jsFile) {
-    if (jsFile.indexOf(fixtures('src/reduce/page') + '/') === 0) {
+    if (jsFile.indexOf(fixtures('src/build/page') + '/') === 0) {
       return path.dirname(jsFile) + '/index.css'
     }
 
-    let prefix = fixtures('src/reduce/web_modules') + '/'
+    let prefix = fixtures('src/build/web_modules') + '/'
     if (jsFile.indexOf(prefix) === 0) {
       return styleResolve(
         jsFile.slice(prefix.length).split('/')[0],
@@ -27,8 +27,13 @@ module.exports = {
   },
 
   reduce: {
-    basedir: fixtures('src/reduce'),
-    paths: [fixtures('src/reduce/web_modules')],
+    basedir: fixtures('src/build'),
+    paths: [fixtures('src/build/web_modules')],
+  },
+
+  watch: {
+    js: { entryGlob: 'page/**/index.js' },
+    css: { entryGlob: 'page/**/index.css' },
   },
 
   on: {
@@ -38,16 +43,21 @@ module.exports = {
   },
 
   js: {
-    entries: 'page/**/index.js',
+    entries: 'page/**/*.js',
     bundleOptions: {
       groups: 'page/**/index.js',
       common: 'common.js',
     },
-    dest: fixtures('build'),
+    reduce: {
+      plugin: 'dedupify',
+    },
+    postTransform: [
+      ['dest', fixtures('build')],
+      [Clean([])],
+    ],
   },
 
   css: {
-    entries: 'page/**/index.css',
     bundleOptions: {
       groups: 'page/**/index.css',
       common: 'common.css',
@@ -58,6 +68,7 @@ module.exports = {
     },
     postTransform: [
       [require('reduce-css').dest, fixtures('build')],
+      [Clean([])],
     ],
   },
 }

@@ -38,16 +38,17 @@ module.exports = {
   },
 
   js: {
-    entries: 'page/**/index.js',
+    entries: 'page/**/*.js',
     bundleOptions: {
       groups: 'page/**/index.js',
       common: 'common.js',
     },
-    dest: fixtures('build'),
+    postTransform: [
+      ['dest', fixtures('build')],
+    ],
   },
 
   css: {
-    entries: 'page/**/index.css',
     bundleOptions: {
       groups: 'page/**/index.css',
       common: 'common.css',

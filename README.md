@@ -8,7 +8,7 @@ Pack js and css files from web components into bundles.
 **Features**
 
 * Use [`reduce-js`] and [`reduce-css`] to pack scripts and styles into common shared bundles.
-* Automatically pack styles together when their bounding scripts `require` each other.
+* Automatically pack styles together when their binding scripts `require` each other.
 * Use [`postcss`] to preprocess styles by default.
 
 ## Example
@@ -135,78 +135,13 @@ module.exports = '!'
 
 #### Reduce scripts and styles to bundles
 
-example/reduce.config.js:
-
-```js
-var path = require('path')
-var fixtures = path.resolve.bind(path, __dirname, 'src')
-var resolver = require('custom-resolve')
-var promisify = require('node-promisify')
-var styleResolve = promisify(resolver({
-  main: 'style',
-  extensions: '.css',
-  moduleDirectory: ['web_modules', 'node_modules'],
-}))
-
-module.exports = {
-  getStyle: function (jsFile) {
-    if (jsFile.indexOf(fixtures('page') + '/') === 0) {
-      return path.dirname(jsFile) + '/index.css'
-    }
-    var prefix = fixtures('web_modules') + '/'
-    if (jsFile.indexOf(prefix) === 0) {
-      return styleResolve(
-        jsFile.slice(prefix.length).split('/')[0],
-        { filename: jsFile }
-      )
-    }
-
-    prefix = fixtures('node_modules') + '/'
-    if (jsFile.indexOf(prefix) === 0) {
-      return styleResolve(
-        jsFile.slice(prefix.length).split('/')[0],
-        { filename: jsFile }
-      )
-    }
-  },
-
-  basedir: fixtures(),
-  paths: [fixtures('web_modules')],
-
-  on: {
-    log: console.log.bind(console),
-    error: function (err) {
-      console.log(err.stack)
-    },
-  },
-
-  js: {
-    entries: 'page/**/*.js',
-    bundleOptions: {
-      groups: '**/page/**/index.js',
-      common: 'common.js',
-    },
-    dest: 'build',
-  },
-
-  css: {
-    atRuleName: 'external',
-    bundleOptions: {
-      groups: '**/page/**/index.css',
-      common: 'common.css',
-    },
-    resolve: styleResolve,
-    dest: 'build',
-  },
-}
-
-```
+[example/reduce.config.js](example/reduce.config.js)
 
 example/gulpfile.js:
 
 ```js
 var gulp = require('gulp')
-var reduce = require('..')
+var reduce = require('reduce-web-component')
 
 var bundler = reduce(require('./reduce.config'))
 
@@ -217,9 +152,10 @@ gulp.task('clean', function () {
 
 gulp.task('build', ['clean'], bundler)
 gulp.task('watch', ['clean'], function (cb) {
-  bundler.watch().on('close', cb)
+  bundler.watch()
+    .on('close', cb)
+    .on('done', () => console.log('-'.repeat(80)))
 })
-
 
 ```
 
@@ -274,89 +210,219 @@ bundler.watch()
 
 ### options
 
-#### js
-Specify how to pack javascript modules.
+* `js`: options for packing js
+* `css`: options for packing css
+* `reduce`: common options for both js and css. Actually, this object will be merged into `options.js.reduce` and `options.css.reduce`.
+* `on`: listeners for both js and css. Merged into `options.js.on` and `options.css.on`.
+* `getStyle`: binding JS and CSS together so that when js is required, the corresponding css will also be imported by the dependant's css.
+* `watch`: options for [`watchify2`].
+
+#### options.js and options.css
+These two objects share the following fields.
+
+**reduce**
+
+*Optional*
 
 Type: `Object`
 
-`js.entries`: `String`, `Array`.
-Globs to locate script entries to components.
-It is passed to [`reduce-js`] as the first argument.
+Passed to [`browserify`] or [`depsify`] as options.
 
-`js.postTransform`: `Array`.
-A list of [`gulp`]-plugins to transform the created [`vinyl`] file objects.
+Do not specify the `reduce.entries` as globs.
+Use the following `entries` option instead.
 
-`js.dest`:
-`[reduce.dest].concat(js.dest)` will be appended to `js.postTransform` to write files into the disk.
+**entries**
 
-`js.reduce`: `Object`.
-Options passed to [`reduce-js`] as the second argument.
+*Optional*
 
-`js.on`: `Object`.
-A group of event listeners to be added to the instance of [`reduce-js`].
-Usually you can handle the `error` and `log` events here.
+Type: `String`, `Array`
 
-**NOTE**
-All other fields will be assigned to `js.reduce`,
-for the sake of the convenience of setting `js.reduce`.
+Globs to locate entries.
+Passed to [`vinyl-fs#src`] as the first argument,
+with the second argument `{ cwd: b._options.basedir }`.
 
-#### css
-Specify how to pack style modules.
+**postTransform**
+
+*Optional*
+
+Type: `Array`
+
+A list of lazy streams to transform `b.bundle()`.
+Each element is an array containing the constructor with its arguments to create the transform.
+The first element can also be `'dest'`.
+If so, `reduce.dest` is used as the constructor,
+where `reduce` could be either `require('reduce-js')` or `require('reduce-css')`.
+
+```js
+{
+  js: {
+    postTransform: [
+      [require('gulp-uglify')],
+      ['dest', 'build'],
+    ],
+  }
+}
+
+```
+
+**dest**
+
+*Optional*
+
+Type: `String`, `Array`
+
+Arguments passed to `reduce.dest`,
+which writes files to disk.
+
+This is just a shortcut for adding in the `postTransform` option the `reduce.dest`, as the last transform for `b.bundle()`.
+
+**bundleOptions**
+
+Options passed to [`common-bundle`].
+
+**on**
 
 Type: `Object`
 
-`css.entries`: `String`, `Array`.
-Globs to locate script entries to components.
-It is passed to [`reduce-css`] as the first argument.
+*Optional*
 
-`css.postTransform`: `Array`.
-A list of [`gulp`]-plugins to transform the created [`vinyl`] file objects.
+Specify listeners to be attached on the [`browserify`] or [`depsify`] instance.
 
-`css.dest`:
-`[reduce.dest].concat(css.dest)` will be appended to `css.postTransform` to write files into the disk.
+```js
+{
+  js: {
+    on: {
+      error: console.log.bind(console),
+      log: console.log.bind(console),
+    },
+  }
+}
 
-`css.reduce`: `Object`.
-Options passed to [`reduce-css`] as the second argument.
+```
 
-`css.postcss`: `String`, `Array`, `Function`.
-If not `false`, [`postcss`] will be enabled to preprocess styles before packing.
-And this option can be used to modify the plugins used by [`postcss`].
-It has the same meaning with [`reduce-css-postcss#processorFilter`].
-Check [`reduce-css-postcss`] to see the list of default plugins.
+#### options.reduce
+Options merged into both `options.js.reduce` and `options.css.reduce`.
 
-`css.on`: `Object`.
-A group of event listeners to be added to the instance of [`reduce-css`].
-Usually you can handle the `error` and `log` events here.
+```js
+{
+  reduce: {
+    basedir: __dirname,
+  },
+  js: {
+    reduce: {
+      paths: [__dirname + '/scripts'],
+    },
+  },
+  css: {
+    reduce: {
+      paths: [__dirname + '/styles'],
+    },
+  }
+}
 
-**NOTE**
-All other fields will be assigned to `css.reduce`,
-for the sake of the convenience of setting `css.reduce`.
+```
 
-#### getStyle
+**postcss**
+
+Only valid for css.
+Probably should be specified by `options.css.reduce.postcss`.
+
+If not `false`, [`postcss`] will be applied to preprocess css.
+And this option can be used to specify the postcss plugins.
+By default, plugins from [`reduce-css-postcss`] are applied.
+
+`options.css.postcss` specifies the `processorFilter` option for [`reduce-css-postcss`].
+
+#### options.on
+Listeners merged into both `options.js.on` and `options.css.on`.
+
+```js
+{
+  on: {
+    log: console.log.bind(console),
+    error: function (err) {
+      console.log(err.stack)
+    },
+    'reduce.end': function (bytes, duration) {
+      let b = this
+      console.log(
+        '[%s done] %d bytes written (%d seconds)',
+        b._type.toUpperCase(), bytes, (duration / 1000).toFixed(2)
+      )
+    },
+  },
+  js: {
+    on: {
+      'common.map': function (map) {
+        console.log('[JS bundles] %s', Object.keys(map).join(', '))
+      },
+    },
+  },
+  css: {
+    on: {
+      'common.map': function (map) {
+        console.log('[CSS bundles] %s', Object.keys(map).join(', '))
+      },
+    },
+  }
+
+}
+
+```
+
+**Events**
+
+* `.on('log', msg => {})`. Messages from plugins.
+* `.on('error', err => {})`.
+* `.on('common.map', map => {})`. The bundle map info from [`common-bundle`].
+* `.on('reduce.end', (bytes, duration) => {})`. Information  on bundles created and time consumed.
+* All other events emitted on the [`browserify`] and [`depsify`] instance.
+
+#### options.getStyle
 Specify how to add implicit dependencies to styles.
+If not specified, js and css will pack independently.
 
 Type: `Function`
+
+*Optional*
 
 Signature: `cssFiles = getStyle(jsFile)`
 
 `cssFiles` could be `String`, `Array` or `Promise`.
 
-If `cssFiles` is not empty,
-`jsFile` has some bounded styles,
+If `cssFiles` is not empty, `jsFile` has some bound styles,
 which means:
 
-* when a script module with bounded styles `require`s `jsFile`, its bounded styles will depend on `cssFiles` implicitly.
-* when `jsFile` `require`s another script module with bounded styles, `cssFiles` will depend on those styles implicitly.
+* when a script module with bound styles `require`s `jsFile`, its styles will depend on `cssFiles` implicitly.
+* when `jsFile` `require`s another script with bound styles, `cssFiles` will depend on those styles implicitly.
+
+```js
+{
+  getStyle: function (jsFile) {
+    if (jsFile.indexOf('/path/to/src/component/') === 0) {
+      // bind index.js and index.css together
+      // If `component/A/index.js` requires `component/B/index.js`,
+      // then `component/B/index.css` will always be packed into the bundle containing `component/A/index.css`
+      // (or in the common bundle it shares with other bundles).
+      return path.dirname(jsFile) + '/index.css'
+    }
+  },
+}
+
+```
 
 ## Related
 * [`reduce-js`]
 * [`reduce-css`]
 
-[`reduce-js`]: https://github.com/zoubin/reduce-js
-[`reduce-css`]: https://github.com/zoubin/reduce-css
+[`reduce-js`]: https://github.com/reducejs/reduce-js
+[`browserify`]: https://github.com/substack/node-browserify
+[`depsify`]: https://github.com/reducejs/depsify
+[`reduce-css`]: https://github.com/reducejs/reduce-css
 [`gulp`]: https://github.com/gulpjs/gulp
 [`vinyl`]: https://github.com/gulpjs/vinyl
+[`vinyl-fs#src`]: https://github.com/gulpjs/vinyl-fs#srcglobs-options
 [`postcss`]: https://github.com/postcss/postcss
-[`reduce-css-postcss#processorFilter`]: https://github.com/zoubin/reduce-css-postcss#processorfilter
-[`reduce-css-postcss`]: https://github.com/zoubin/reduce-css-postcss#default-plugins
+[`reduce-css-postcss`]: https://github.com/reducejs/reduce-css-postcss#default-plugins
+[`custom-resolve`]: https://github.com/zoubin/custom-resolve
 

@@ -1,8 +1,11 @@
-var path = require('path')
-var fixtures = path.resolve.bind(path, __dirname, 'src')
-var resolver = require('custom-resolve')
-var promisify = require('node-promisify')
-var styleResolve = promisify(resolver({
+'use strict'
+
+const path = require('path')
+const fixtures = path.resolve.bind(path, __dirname, 'src')
+const resolver = require('custom-resolve')
+const promisify = require('node-promisify')
+const Clean = require('clean-remains')
+const styleResolve = promisify(resolver({
   main: 'style',
   extensions: '.css',
   moduleDirectory: ['web_modules', 'node_modules'],
@@ -13,7 +16,7 @@ module.exports = {
     if (jsFile.indexOf(fixtures('page') + '/') === 0) {
       return path.dirname(jsFile) + '/index.css'
     }
-    var prefix = fixtures('web_modules') + '/'
+    let prefix = fixtures('web_modules') + '/'
     if (jsFile.indexOf(prefix) === 0) {
       return styleResolve(
         jsFile.slice(prefix.length).split('/')[0],
@@ -40,15 +43,30 @@ module.exports = {
     error: function (err) {
       console.log(err.stack)
     },
+    'common.map': function (map) {
+      console.log('[%s bundles] %s', this._type.toUpperCase(), Object.keys(map).join(', '))
+    },
+    'reduce.end': function (bytes, duration) {
+      console.log(
+        '[%s done] %d bytes written (%d seconds)',
+        this._type.toUpperCase(), bytes, (duration / 1000).toFixed(2)
+      )
+    },
   },
 
   js: {
     entries: 'page/**/index.js',
     bundleOptions: {
-      groups: '**/page/**/index.js',
+      groups: 'page/**/index.js',
       common: 'common.js',
     },
-    dest: 'build',
+    reduce: {
+      plugin: 'dedupify',
+    },
+    postTransform: [
+      ['dest', 'build'],
+      [Clean([])],
+    ],
   },
 
   css: {
@@ -58,10 +76,13 @@ module.exports = {
       resolve: styleResolve,
     },
     bundleOptions: {
-      groups: '**/page/**/index.css',
+      groups: 'page/**/index.css',
       common: 'common.css',
     },
-    dest: 'build',
+    postTransform: [
+      ['dest', 'build'],
+      [Clean([])],
+    ],
   },
 
   watch: {
