@@ -1,7 +1,10 @@
 # reduce-web-component
 [![version](https://img.shields.io/npm/v/reduce-web-component.svg)](https://www.npmjs.org/package/reduce-web-component)
 [![status](https://travis-ci.org/reducejs/reduce-web-component.svg)](https://travis-ci.org/reducejs/reduce-web-component)
-![node](https://img.shields.io/node/v/postcss-custom-url.svg)
+[![coverage](https://img.shields.io/coveralls/reducejs/reduce-web-component.svg)](https://coveralls.io/github/reducejs/reduce-web-component)
+[![dependencies](https://david-dm.org/reducejs/reduce-web-component.svg)](https://david-dm.org/reducejs/reduce-web-component)
+[![devDependencies](https://david-dm.org/reducejs/reduce-web-component/dev-status.svg)](https://david-dm.org/reducejs/reduce-web-component#info=devDependencies)
+![node](https://img.shields.io/node/v/reduce-web-component.svg)
 
 **Features**
 
