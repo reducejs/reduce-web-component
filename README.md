@@ -12,54 +12,43 @@ Pack js and css files from web components into bundles.
 * Use [`postcss`] to preprocess styles by default.
 
 ## Example
-Create common shared bundles as well as page-specific ones.
+Suppose we put pages under the directory `/path/to/src/page`,
+and other components under `/path/to/src/node_modules`.
+
+Pages and components may have a style entry as well as a script entry.
+For simplicity, entries are named as `index.[js|css]` if present.
+
+There are two pages (`hello` and `hi`), as well as two components (`world`, `earth`).
+
+The `hello` page will present the `world` component, both scripts and styles needed.
+We can achieve it by adding `require('world')` in `hello/index.js`,
+and `@import "world";` in `hello/index.css`.
+However, if `world` is no longer needed,
+we have to remove both `require('world')` and `@import "world"`,
+which is really cumbersome.
+
+So, we decide that if the script entry is `require`d,
+the corresponding style entry should also be `@import`ed.
+In such cases, we say the component is required.
+The magic to be made here,
+is adding style dependencies according to script dependencies.
+
+Eventually, we want scripts required by all pages to be packed into `/path/to/build/bundle.js`,
+and styles into `/path/to/build/bundle.css`.
+
+We can use this package to make it.
 
 ### Input
 
-#### Source directories
+**The `hello` page**
 
-```
-example/src/
-├── node_modules
-│   └── exclamation
-│       ├── index.css
-│       └── index.js
-├── page
-│   ├── hello
-│   │   ├── index.css
-│   │   └── index.js
-│   └── hi
-│       └── index.js
-└── web_modules
-    ├── earth
-    │   ├── earth.css
-    │   ├── index.js
-    │   └── package.json
-    ├── helper
-    │   └── color.css
-    ├── round
-    │   └── index.css
-    └── world
-        ├── index.css
-        └── index.js
-
-```
-
-#### Dependency graphs for JS and CSS
-
-![native dependency graph](example/images/native-deps-graph.png)
-
-#### File contents
-
-**The `hello` component**
-
-* Script entry (page/hello/index.js)
+* Script entry (`page/hello/index.js`)
 ```js
 module.exports = 'hello, ' + require('world')
 
 ```
 
-* Style entry (page/hello/index.css)
+* Style entry (`page/hello/index.css`)
 ```css
 .hello {}
 
@@ -67,136 +56,118 @@ module.exports = 'hello, ' + require('world')
 
 **The `hi` component**
 
-* Script entry (page/hi/index.js)
+* Script entry (`page/hi/index.js`)
 ```js
 module.exports = 'hi, ' + require('earth')
 
 ```
 
+* Style entry (`null`)
+
 **The `world` component**
 
-* Script entry (web_modules/world/index.js)
+* Script entry (`node_modules/world/index.js`)
 ```js
-module.exports = 'world' + require('exclamation')
+module.exports = 'world'
 
 ```
 
-* Style entry (web_modules/world/index.css)
+* Style entry (`node_modules/world/index.css`)
 ```css
-@external "round";
-@import "helper/color";
 .world {
-  color: $red;
+  color: red;
 }
 
 ```
 
 **The `earth` component**
 
-* Script entry (web_modules/earth/index.js)
+* Script entry (`node_modules/earth/index.js`)
 ```js
-module.exports = 'earth' + require('exclamation')
+module.exports = 'earth'
 
 ```
 
-* Style entry (web_modules/earth/earth.css)
+* Style entry (`node_modules/earth/index.css`)
 ```css
-@external "round";
-@import "helper/color";
 .earth {
-  color: $blue;
+  color: blue;
 }
 
 ```
 
-**The `round` component**
+The original dependency graph looks like:
 
-* Style entry (web_modules/round/index.css)
-```css
-.round {}
+![native dependency graph](example/images/native-deps-graph.png)
 
-```
+The dependency graph we want for bundling should look like:
 
-**The `exclamation` component**
+![component dependency graph](example/images/component-deps-graph.png)
 
-* Script entry (node_modules/exclamation/index.js)
-```js
-module.exports = '!'
-
-```
-
-* Style entry (node_modules/exclamation/index.css)
-```css
-.exclamation {}
-
-```
+**NOTE**
+As `hi` requires `earth` and `earth` is shipped with styles,
+`hi` will need styles at last.
+So a virtual `hi/index.css` is created.
 
 ### Output
 
-#### Reduce scripts and styles to bundles
-
-[example/reduce.config.js](example/reduce.config.js)
-
-example/gulpfile.js:
+We run the following script to bundle js and css:
 
 ```js
-var gulp = require('gulp')
-var reduce = require('reduce-web-component')
+'use strict'
 
-var bundler = reduce(require('./reduce.config'))
+const path = require('path')
+const reduce = require('reduce-web-component')
 
-gulp.task('clean', function () {
-  var del = require('del')
-  return del('build')
-})
+const options = {
+  getStyle: function (jsFile) {
+    return path.dirname(jsFile) + '/index.css'
+  },
 
-gulp.task('build', ['clean'], bundler)
-gulp.task('watch', ['clean'], function (cb) {
-  bundler.watch()
-    .on('close', cb)
-    .on('done', () => console.log('-'.repeat(80)))
-})
+  reduce: {
+    basedir: path.resolve(__dirname, 'src'),
+  },
+
+  on: {
+    log: console.log.bind(console),
+    error: function (err) {
+      console.error(err.stack)
+    },
+    'reduce.end': function (bytes, duration) {
+      console.log(
+        '[%s done] %d bytes written (%d seconds)',
+        this._type, bytes, (duration / 1000).toFixed(2)
+      )
+    },
+  },
+
+  js: {
+    entries: 'page/**/index.js',
+    bundleOptions: 'bundle.js',
+    dest: 'build',
+  },
+
+  css: {
+    // No need to specify entries,
+    // because we have done that implicitly by setting getStyle.
+    // entries: 'page/**/index.css',
+    bundleOptions: 'bundle.css',
+    dest: 'build',
+  },
+}
+
+reduce(options)().then(() => console.log('DONE'))
+
 
 ```
 
-#### Dependency graph for components
-
-We declare that
-directories in `node_modules`, `page`, `web_modules`
-should be treated as web components,
-i.e.,
-they may carry styles as well as scripts,
-by specifying entries through `style` and `main` fields in the `package.json`,
-and whenever the script entry of some component `require`s the entry of another component,
-its style entry implicitly depends on the style entry of the latter.
-
-![native dependency graph](example/images/component-deps-graph.png)
-
-#### Production directories
-
-```
-example/build/
-├── common.css
-├── common.js
-└── page
-    ├── hello
-    │   ├── index.css
-    │   └── index.js
-    └── hi
-        ├── index.css
-        └── index.js
-
-```
-
-#### Bundle contents
-
-![bundles](example/images/bundles.png)
-
+Besides `hello/index.css` and `world/index.css`,
+`earth/index.css` will also be included in `bundle.css`.
 
 ## Usage
 
 ```js
-var reduce = require('reduce-web-component')
+const reduce = require('reduce-web-component')
 
 var bundler = reduce(options)
 
@@ -208,7 +179,40 @@ bundler.watch()
 
 ```
 
-### options
+To work with [`gulp`]:
+
+```js
+const gulp = require('gulp')
+const reduce = require('reduce-web-component')
+
+const bundler = reduce(options)
+
+gulp.task('build', bundler)
+gulp.task('watch', function (cb) {
+  bundler.watch()
+    .on('close', cb)
+    .on('done', () => console.log('-'.repeat(40)))
+})
+
+```
+
+## Common shared bundles
+Check the [configure](example/multi/reduce.config.js) file.
+
+## Browserify
+Scripts are bundled with [`browserify`].
+So, plugins and transforms can be applied during the build process.
+
+Check [`browserify-handbook`] for more information.
+
+## PostCss
+Styles are preprocessed with [`postcss`].
+Check [`reduce-css-postcss`] to see the default processors.
+
+[`depsify`] is used to bundle styles,
+so that styles can be packed into common shared multiple bundles.
+
+## options
 
 * `js`: options for packing js
 * `css`: options for packing css
@@ -217,7 +221,7 @@ bundler.watch()
 * `getStyle`: binding JS and CSS together so that when js is required, the corresponding css will also be imported by the dependant's css.
 * `watch`: options for [`watchify2`].
 
-#### options.js and options.css
+### options.js and options.css
 These two objects share the following fields.
 
 **reduce**
@@ -300,7 +304,7 @@ Specify listeners to be attached on the [`browserify`] or [`depsify`] instance.
 
 ```
 
-#### options.reduce
+### options.reduce
 Options merged into both `options.js.reduce` and `options.css.reduce`.
 
 ```js
@@ -333,7 +337,7 @@ By default, plugins from [`reduce-css-postcss`] are applied.
 
 `options.css.postcss` specifies the `processorFilter` option for [`reduce-css-postcss`].
 
-#### options.on
+### options.on
 Listeners merged into both `options.js.on` and `options.css.on`.
 
 ```js
@@ -375,10 +379,10 @@ Listeners merged into both `options.js.on` and `options.css.on`.
 * `.on('log', msg => {})`. Messages from plugins.
 * `.on('error', err => {})`.
 * `.on('common.map', map => {})`. The bundle map info from [`common-bundle`].
-* `.on('reduce.end', (bytes, duration) => {})`. Information  on bundles created and time consumed.
+* `.on('reduce.end', (bytes, duration) => {})`. Information on bundling.
 * All other events emitted on the [`browserify`] and [`depsify`] instance.
 
-#### options.getStyle
+### options.getStyle
 Specify how to add implicit dependencies to styles.
 If not specified, js and css will pack independently.
 
@@ -417,6 +421,7 @@ which means:
 
 [`reduce-js`]: https://github.com/reducejs/reduce-js
 [`browserify`]: https://github.com/substack/node-browserify
+[`browserify-handbook`]: https://github.com/substack/browserify-handbook
 [`depsify`]: https://github.com/reducejs/depsify
 [`reduce-css`]: https://github.com/reducejs/reduce-css
 [`gulp`]: https://github.com/gulpjs/gulp
