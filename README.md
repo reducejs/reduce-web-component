@@ -3,12 +3,11 @@
 [![status](https://travis-ci.org/reducejs/reduce-web-component.svg)](https://travis-ci.org/reducejs/reduce-web-component)
 ![node](https://img.shields.io/node/v/postcss-custom-url.svg)
 
-Pack js and css files from web components into bundles.
-
 **Features**
 
-* Use [`reduce-js`] and [`reduce-css`] to pack scripts and styles into common shared bundles.
-* Automatically pack styles together when their binding scripts `require` each other.
+* Automatically pack styles together when one component requires another (in scripts).
+* Use [`browserify`] and [`depsify`] to pack scripts and styles into common shared bundles.
+* Use [`watchify2`] to watch file changes, addition and deletion.
 * Use [`postcss`] to preprocess styles by default.
 
 ## Example
@@ -20,8 +19,8 @@ For simplicity, entries are named as `index.[js|css]` if present.
 
 There are two pages (`hello` and `hi`), as well as two components (`world`, `earth`).
 
-The `hello` page will present the `world` component, both scripts and styles needed.
-We can achieve it by adding `require('world')` in `hello/index.js`,
+The `hello` page will present the `world` component (both scripts and styles needed).
+We can do this by adding `require('world')` in `hello/index.js`,
 and `@import "world";` in `hello/index.css`.
 However, if `world` is no longer needed,
 we have to remove both `require('world')` and `@import "world"`,
@@ -107,7 +106,7 @@ The dependency graph we want for bundling should look like:
 **NOTE**
 As `hi` requires `earth` and `earth` is shipped with styles,
 `hi` will need styles at last.
-So a virtual `hi/index.css` is created.
+So a virtual `hi/index.css` is created (but not written into disk).
 
 ### Output
 
@@ -304,6 +303,14 @@ Specify listeners to be attached on the [`browserify`] or [`depsify`] instance.
 
 ```
 
+**postcss**
+
+Only valid for css.
+
+If not `false`, [`postcss`] will be applied to preprocess css.
+And this option can be used to specify the postcss plugins.
+By default, plugins from [`reduce-css-postcss`] are applied.
+
 ### options.reduce
 Options merged into both `options.js.reduce` and `options.css.reduce`.
 
@@ -325,17 +332,6 @@ Options merged into both `options.js.reduce` and `options.css.reduce`.
 }
 
 ```
-
-**postcss**
-
-Only valid for css.
-Probably should be specified by `options.css.reduce.postcss`.
-
-If not `false`, [`postcss`] will be applied to preprocess css.
-And this option can be used to specify the postcss plugins.
-By default, plugins from [`reduce-css-postcss`] are applied.
-
-`options.css.postcss` specifies the `processorFilter` option for [`reduce-css-postcss`].
 
 ### options.on
 Listeners merged into both `options.js.on` and `options.css.on`.
@@ -406,8 +402,9 @@ which means:
     if (jsFile.indexOf('/path/to/src/component/') === 0) {
       // bind index.js and index.css together
       // If `component/A/index.js` requires `component/B/index.js`,
-      // then `component/B/index.css` will always be packed into the bundle containing `component/A/index.css`
-      // (or in the common bundle it shares with other bundles).
+      // then `component/B/index.css` will always be packed into bundles
+      // containing `component/A/index.css`
+      // (or in the common bundle they share).
       return path.dirname(jsFile) + '/index.css'
     }
   },
