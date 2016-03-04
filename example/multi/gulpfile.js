@@ -1,5 +1,5 @@
 var gulp = require('gulp')
-var reduce = require('..')
+var reduce = require('reduce-web-component')
 
 var bundler = reduce(require('./reduce.config'))
 
@@ -10,6 +10,8 @@ gulp.task('clean', function () {
 
 gulp.task('build', ['clean'], bundler)
 gulp.task('watch', ['clean'], function (cb) {
-  bundler.watch().on('close', cb)
+  bundler.watch()
+    .on('close', cb)
+    .on('done', () => console.log('-'.repeat(40)))
 })
 
