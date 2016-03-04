@@ -420,6 +420,7 @@ which means:
 [`browserify`]: https://github.com/substack/node-browserify
 [`browserify-handbook`]: https://github.com/substack/browserify-handbook
 [`depsify`]: https://github.com/reducejs/depsify
+[`watchify2`]: https://github.com/reducejs/watchify2
 [`reduce-css`]: https://github.com/reducejs/reduce-css
 [`gulp`]: https://github.com/gulpjs/gulp
 [`vinyl`]: https://github.com/gulpjs/vinyl
