@@ -1,10 +1,9 @@
-var gulp = require('gulp')
-var reduce = require('reduce-web-component')
-
-var bundler = reduce(require('./reduce.config'))
+const del = require('del')
+const gulp = require('gulp')
+const reduce = require('reduce-web-component')
+const bundler = reduce(require('./reduce.config'))
 
 gulp.task('clean', function () {
-  var del = require('del')
   return del('build')
 })
 

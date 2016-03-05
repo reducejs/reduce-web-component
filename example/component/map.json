@@ -1,0 +1,18 @@
+{
+  "css": {
+    "page/hello/index.css": [
+      "bundle.css"
+    ],
+    "page/hi/index.css": [
+      "bundle.css"
+    ]
+  },
+  "js": {
+    "page/hello/index.js": [
+      "bundle.js"
+    ],
+    "page/hi/index.js": [
+      "bundle.js"
+    ]
+  }
+}

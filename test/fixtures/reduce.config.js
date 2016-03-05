@@ -56,7 +56,7 @@ module.exports = {
       atRuleName: 'external',
       resolve: styleResolve,
     },
-    postTransform: [
+    plugin: [
       [require('reduce-css').dest, fixtures('build')],
     ],
   },

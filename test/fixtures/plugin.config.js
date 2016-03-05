@@ -43,7 +43,7 @@ module.exports = {
       groups: 'page/**/index.js',
       common: 'common.js',
     },
-    postTransform: [
+    plugin: [
       ['dest', fixtures('build')],
     ],
   },
@@ -57,7 +57,7 @@ module.exports = {
       atRuleName: 'external',
       resolve: styleResolve,
     },
-    postTransform: [
+    plugin: [
       [require('reduce-css').dest, fixtures('build')],
     ],
   },
