@@ -7,7 +7,7 @@ module.exports = {
     return path.dirname(jsFile) + '/index.css'
   },
 
-  map: ['map.json', 'page/**/index.+(js|css)'],
+  map: ['reduce.map.json', 'page/**/index.+(js|css)'],
 
   reduce: {
     basedir: path.resolve(__dirname, 'src'),

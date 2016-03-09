@@ -1,8 +1,7 @@
 'use strict'
 
-const util = require('../lib/buildOptions')
+const util = require('../lib/options')
 const test = require('tap').test
-const fs = require('fs')
 
 test('plugin', function (t) {
   t.same(
@@ -93,82 +92,6 @@ test('merge', function (t) {
     'dest'
   )
 
-  t.equal(
-    typeof util.merge({}, { map: 'map.json' }).on['common.map'][0],
-    'function',
-    'common.map'
-  )
-
-  var map = {}
-  util.merge({}, { map: map }).on['common.map'][0]
-    .call({ _type: 'css' }, null, { x: 1 })
-  t.same(map, { css: { x: 1 } }, 'object map')
-
-  t.end()
-})
-
-test('createListener', function (t) {
-  util.createListener(
-    function (map, type) {
-      t.same(map, {})
-      t.equal(type, 'css')
-    }
-  ).call({ _type: 'css' }, null, {})
-
-  util.createListener(
-    function (map) {
-      t.same(map, {
-        'page/A/index.css': ['common.css', 'page/A/index.css'],
-        'page/B/index.css': ['common.css', 'page/B/index.css'],
-      })
-    },
-    'page/**/index.css'
-  ).call({ _type: 'css' }, null, {
-    'page/A/index.css': ['common.css', 'page/A/index.css'],
-    'page/B/index.css': ['common.css', 'page/B/index.css'],
-    'node_modules/X/index.css': ['page/A/index.css'],
-  })
-
-  t.end()
-})
-
-test('writeObj', function (t) {
-  t.same(
-    util.writeObj({ js: {} }, { x: 1 }, 'css'),
-    { css: { x: 1 }, js: {} }
-  )
-
-  t.same(
-    util.writeObj({ css: { x: 2, y: 3 } }, { x: 1 }, 'css'),
-    { css: { x: 1 } }
-  )
-
-  t.end()
-})
-
-test('writeFile', function (t) {
-  var file = 'map.json'
-
-  util.writeFile(file, { x: 1 }, 'js')
-  t.same(
-    JSON.parse(fs.readFileSync('map.json', 'utf8')),
-    { js: { x: 1 } }
-  )
-
-  util.writeFile(file, { x: 2 }, 'css')
-  t.same(
-    JSON.parse(fs.readFileSync('map.json', 'utf8')),
-    { css: { x: 2 }, js: { x: 1 } }
-  )
-
-  util.writeFile(file, { x: 1, z: 3, y: 2 }, 'js')
-  t.same(
-    Object.keys(JSON.parse(fs.readFileSync('map.json', 'utf8')).js),
-    ['x', 'y', 'z']
-  )
-
-  fs.unlinkSync(file)
-
   t.end()
 })
 
@@ -211,6 +134,30 @@ test('js', function (t) {
       cache: {},
       packageCache: {},
     }
+  )
+
+  t.end()
+})
+
+test('create', function (t) {
+  t.same(
+    util.create({}).css.reduce,
+    { cache: {}, packageCache: {}, paths: [], resolve: { paths: [] } }
+  )
+
+  t.same(
+    util.create({}).js.reduce,
+    { cache: {}, packageCache: {}, paths: [] }
+  )
+
+  t.same(
+    util.create({ css: false }).css,
+    false
+  )
+
+  t.same(
+    util.create({ js: false }).js,
+    false
   )
 
   t.end()

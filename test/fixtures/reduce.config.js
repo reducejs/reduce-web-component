@@ -31,12 +31,6 @@ module.exports = {
     paths: [fixtures('src/reduce/web_modules')],
   },
 
-  on: {
-    error: function (err) {
-      console.log(err.stack)
-    },
-  },
-
   js: {
     entries: 'page/**/index.js',
     bundleOptions: {
