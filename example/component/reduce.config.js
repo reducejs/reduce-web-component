@@ -7,6 +7,8 @@ module.exports = {
     return path.dirname(jsFile) + '/index.css'
   },
 
+  map: ['reduce.map.json', 'page/**/index.+(js|css)'],
+
   reduce: {
     basedir: path.resolve(__dirname, 'src'),
   },
@@ -24,10 +26,11 @@ module.exports = {
     },
   },
 
+  dest: 'build',
+
   js: {
     entries: 'page/**/index.js',
     bundleOptions: 'bundle.js',
-    dest: 'build',
   },
 
   css: {
@@ -35,7 +38,6 @@ module.exports = {
     // because we have done that implicitly by setting getStyle.
     // entries: 'page/**/index.css',
     bundleOptions: 'bundle.css',
-    dest: 'build',
   },
 
   watch: {

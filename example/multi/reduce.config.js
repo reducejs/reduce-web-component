@@ -9,6 +9,8 @@ module.exports = {
     return path.dirname(jsFile) + '/index.css'
   },
 
+  map: ['reduce.map.json', 'page/**/index.+(js|css)'],
+
   reduce: {
     basedir: fixtures(),
     paths: [fixtures('web_modules')],
@@ -39,7 +41,7 @@ module.exports = {
     reduce: {
       plugin: 'dedupify',
     },
-    postTransform: [
+    plugin: [
       ['dest', 'build'],
       [Clean([])],
     ],
@@ -54,15 +56,23 @@ module.exports = {
       groups: 'page/**/index.css',
       common: 'common.css',
     },
-    postTransform: [
+    plugin: [
       ['dest', 'build'],
       [Clean([])],
     ],
   },
 
   watch: {
-    js: { entryGlob: 'page/**/index.js' },
-    css: { entryGlob: 'page/**/index.css' },
+    js: {
+      entryGlob: 'page/**/index.js',
+      // do not watch files under node_modules
+      ignoreWatch: true,
+    },
+    css: {
+      entryGlob: 'page/**/index.css',
+      // do not watch files under node_modules
+      ignoreWatch: true,
+    },
   },
 }
 

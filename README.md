@@ -247,22 +247,22 @@ Globs to locate entries.
 Passed to [`vinyl-fs#src`] as the first argument,
 with the second argument `{ cwd: b._options.basedir }`.
 
-**postTransform**
+**plugin**
 
 *Optional*
 
 Type: `Array`
 
-A list of lazy streams to transform `b.bundle()`.
+A list of [`gulp`] plugins to process `b.bundle()`.
+
 Each element is an array containing the constructor with its arguments to create the transform.
-The first element can also be `'dest'`.
-If so, `reduce.dest` is used as the constructor,
+If the first element is `'dest'`, `reduce.dest` is used as the constructor,
 where `reduce` could be either `require('reduce-js')` or `require('reduce-css')`.
 
 ```js
 {
   js: {
-    postTransform: [
+    plugin: [
       [require('gulp-uglify')],
       ['dest', 'build'],
     ],
@@ -280,7 +280,7 @@ Type: `String`, `Array`
 Arguments passed to `reduce.dest`,
 which writes files to disk.
 
-This is just a shortcut for adding in the `postTransform` option the `reduce.dest`, as the last transform for `b.bundle()`.
+This is just a shortcut for adding in the `plugin` option the `reduce.dest`, as the last transform for `b.bundle()`.
 
 **bundleOptions**
 
@@ -377,7 +377,8 @@ Listeners merged into both `options.js.on` and `options.css.on`.
 
 * `.on('log', msg => {})`. Messages from plugins.
 * `.on('error', err => {})`.
-* `.on('common.map', map => {})`. The bundle map info from [`common-bundle`].
+* `.on('common.map', (bundleMap, inputMap) => {})`.
+Check [here](https://github.com/reducejs/common-bundle#boncommonmap-bundlemap-inputmap--) for more information.
 * `.on('reduce.end', (bytes, duration) => {})`. Information on bundling.
 * All other events emitted on the [`browserify`] and [`depsify`] instance.
 
@@ -415,6 +416,31 @@ which means:
 
 ```
 
+### options.watch
+
+`options.watch.js` and `options.watch.css` are passed to [`watchify2`]
+to watch JS and CSS file changes.
+
+```js
+{
+  watch: {
+    js: {
+      // rebundle when entries are added or removed
+      entryGlob: 'page/**/index.js',
+      // do not watch files under node_modules
+      ignoreWatch: true,
+    },
+    css: {
+      // rebundle when entries are added or removed
+      entryGlob: 'page/**/index.css',
+      // do not watch files under node_modules
+      ignoreWatch: true,
+    },
+  },
+}
+
+```
+
 ## Related
 * [`reduce-js`]
 * [`reduce-css`]
@@ -423,6 +449,7 @@ which means:
 [`browserify`]: https://github.com/substack/node-browserify
 [`browserify-handbook`]: https://github.com/substack/browserify-handbook
 [`depsify`]: https://github.com/reducejs/depsify
+[`common-bundle`]: https://github.com/reducejs/common-bundle
 [`watchify2`]: https://github.com/reducejs/watchify2
 [`reduce-css`]: https://github.com/reducejs/reduce-css
 [`gulp`]: https://github.com/gulpjs/gulp

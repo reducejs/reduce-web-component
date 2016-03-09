@@ -1,0 +1,18 @@
+{
+  "css": {
+    "page/hello/index.css": [
+      "page/hello/index.css"
+    ],
+    "page/hi/index.css": [
+      "page/hi/index.css"
+    ]
+  },
+  "js": {
+    "page/hello/index.js": [
+      "page/hello/index.js"
+    ],
+    "page/hi/index.js": [
+      "page/hi/index.js"
+    ]
+  }
+}

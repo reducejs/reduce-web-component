@@ -51,7 +51,7 @@ module.exports = {
     reduce: {
       plugin: 'dedupify',
     },
-    postTransform: [
+    plugin: [
       ['dest', fixtures('build')],
       [Clean([])],
     ],
@@ -66,7 +66,7 @@ module.exports = {
       atRuleName: 'external',
       resolve: styleResolve,
     },
-    postTransform: [
+    plugin: [
       [require('reduce-css').dest, fixtures('build')],
       [Clean([])],
     ],

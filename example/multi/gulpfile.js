@@ -1,10 +1,9 @@
-var gulp = require('gulp')
-var reduce = require('reduce-web-component')
-
-var bundler = reduce(require('./reduce.config'))
+const del = require('del')
+const gulp = require('gulp')
+const reduce = require('reduce-web-component')
+const bundler = reduce(require('./reduce.config'))
 
 gulp.task('clean', function () {
-  var del = require('del')
   return del('build')
 })
 
@@ -12,6 +11,12 @@ gulp.task('build', ['clean'], bundler)
 gulp.task('watch', ['clean'], function (cb) {
   bundler.watch()
     .on('close', cb)
-    .on('done', () => console.log('-'.repeat(40)))
+    .on('done', () => {
+      console.log('-'.repeat(40))
+      console.log(
+        reduce.getPageDeps('page/hi/index.*', 'reduce.config.js')
+      )
+      console.log('='.repeat(40))
+    })
 })
 
