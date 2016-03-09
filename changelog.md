@@ -1,4 +1,12 @@
-<!-- 785b8de 1457085429000 -->
+<!-- 781f57b 1457519566000 -->
+
+## [v0.4.1](https://github.com/reducejs/reduce-web-component/commit/781f57b) (2016-03-09)
+
+* [[`b39950e`](https://github.com/reducejs/reduce-web-component/commit/b39950e)] Feature: exports.deps
+
+* [[`f538887`](https://github.com/reducejs/reduce-web-component/commit/f538887)] Feature: options.map
+
+* [[`d5f1565`](https://github.com/reducejs/reduce-web-component/commit/d5f1565)] changelog
 
 ## [v0.4.0](https://github.com/reducejs/reduce-web-component/commit/785b8de) (2016-03-04)
 
