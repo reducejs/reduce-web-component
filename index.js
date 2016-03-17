@@ -1,21 +1,30 @@
-'use strict'
+var path = require('path')
+var Watch = require('./lib/watch')
+var reduce = require('./lib/reduce')
+var Options = require('./lib/options')
+var inputMap = require('./lib/input-map')
 
-const reduce = require('./lib/reduce')
-const Watch = require('./lib/watch')
-const Options = require('./lib/options')
-
-exports = module.exports = function (opts) {
-  opts = Options.create(opts)
-
-  function bundler() {
-    return reduce(opts)
+function bundle(opts) {
+  if (typeof opts === 'string') {
+    opts = require(path.resolve(opts))
   }
-
-  bundler.watch = function () {
-    return new Watch(opts).start()
-  }
-
-  return bundler
+  return reduce(Options.create(opts))
 }
-exports.deps = require('./lib/pageDeps')
+
+function watch(opts, id) {
+  if (typeof opts === 'string') {
+    id = id || opts
+    opts = require(path.resolve(opts))
+  }
+  if (id) {
+    inputMap.createServer(id, opts)
+  }
+  return new Watch(Options.create(opts)).start()
+}
+
+module.exports = {
+  bundle,
+  watch,
+  getDeps: inputMap.getDeps,
+}
 

@@ -9,8 +9,6 @@ module.exports = {
     return path.dirname(jsFile) + '/index.css'
   },
 
-  map: ['reduce.map.json', 'page/**/index.+(js|css)'],
-
   reduce: {
     basedir: fixtures(),
     paths: [fixtures('web_modules')],

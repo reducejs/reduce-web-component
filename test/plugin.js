@@ -9,7 +9,9 @@ const fixtures = path.resolve.bind(path, __dirname, 'fixtures')
 
 test('plugin', function(t) {
   return del(fixtures('build'))
-    .then(reduce(require(fixtures('plugin.config'))))
+    .then(function () {
+      return reduce.bundle(fixtures('plugin.config'))
+    })
     .then(function () {
       compare(
         t,
