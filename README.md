@@ -158,7 +158,7 @@ const options = {
   },
 }
 
-reduce(options)().then(() => console.log('DONE'))
+reduce.bundle(options).then(() => console.log('DONE'))
 
 
 ```
@@ -171,13 +171,11 @@ Besides `hello/index.css` and `world/index.css`,
 ```js
 const reduce = require('reduce-web-component')
 
-var bundler = reduce(options)
-
 // pack
-bundler().then(function () {})
+reduce.bundle(options).then(() => {})
 
 // watch mode
-bundler.watch()
+reduce.watch(options).on('done', () => {})
 
 ```
 
@@ -187,11 +185,11 @@ To work with [`gulp`]:
 const gulp = require('gulp')
 const reduce = require('reduce-web-component')
 
-const bundler = reduce(options)
-
-gulp.task('build', bundler)
+gulp.task('build', () => {
+  return reduce.bundle(options)
+})
 gulp.task('watch', function (cb) {
-  bundler.watch()
+  reduce.watch(options)
     .on('close', cb)
     .on('done', () => console.log('-'.repeat(40)))
 })
