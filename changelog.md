@@ -1,4 +1,14 @@
-<!-- 781f57b 1457519566000 -->
+<!-- c011626 1458185821000 -->
+
+## [v0.5.0](https://github.com/reducejs/reduce-web-component/commit/c011626) (2016-03-17)
+
+* [[`ce25b4d`](https://github.com/reducejs/reduce-web-component/commit/ce25b4d)] rm unused file
+
+* [[`48496b3`](https://github.com/reducejs/reduce-web-component/commit/48496b3)] readme
+
+* [[`bfe956b`](https://github.com/reducejs/reduce-web-component/commit/bfe956b)] Feature: getDeps
+
+* [[`57d6b26`](https://github.com/reducejs/reduce-web-component/commit/57d6b26)] changelog
 
 ## [v0.4.1](https://github.com/reducejs/reduce-web-component/commit/781f57b) (2016-03-09)
 
