@@ -1,6 +1,6 @@
 {
   "name": "reduce-web-component",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Pack js and css files in web components",
   "main": "index.js",
   "scripts": {
