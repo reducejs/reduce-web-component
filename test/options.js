@@ -7,10 +7,7 @@ test('plugin', function (t) {
   t.same(
     util.plugin({ plugin: ['x'] }, './delog'),
     {
-      plugin: [
-        'x',
-        [require('../lib/delog')],
-      ],
+      plugin: [ 'x', ['./delog'] ],
     },
     'plugin exists'
   )
@@ -26,9 +23,7 @@ test('plugin', function (t) {
   t.same(
     util.plugin({}, './delog'),
     {
-      plugin: [
-        [require('../lib/delog')],
-      ],
+      plugin: [ ['./delog'] ],
     },
     'string'
   )
@@ -37,7 +32,7 @@ test('plugin', function (t) {
     util.plugin({}, './delog', 1),
     {
       plugin: [
-        [require('../lib/delog'), 1],
+        ['./delog', 1],
       ],
     },
     'string, single arg'
@@ -47,7 +42,7 @@ test('plugin', function (t) {
     util.plugin({}, './delog', [1, 2]),
     {
       plugin: [
-        [require('../lib/delog'), 1, 2],
+        ['./delog', 1, 2],
       ],
     },
     'string, args'
@@ -60,7 +55,6 @@ test('merge', function (t) {
   t.same(
     util.merge({}),
     {
-      on: {},
       reduce: { cache: {}, packageCache: {}, paths: [] },
     },
     'default'
@@ -95,15 +89,15 @@ test('merge', function (t) {
   t.end()
 })
 
-test('dest', function (t) {
+test('processPlugins', function (t) {
   var reduce = require('reduce-js')
   t.same(
-    util.dest({ plugin: [['dest', 'x']] }, reduce),
+    util.processPlugins({ plugin: [['dest', 'x']] }, reduce),
     { plugin: [[reduce.dest, 'x']] }
   )
 
   t.same(
-    util.dest({ dest: 'x' }, reduce),
+    util.processPlugins({ dest: 'x' }, reduce),
     { plugin: [[reduce.dest, 'x']], dest: 'x' }
   )
 

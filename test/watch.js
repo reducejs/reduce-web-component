@@ -22,8 +22,7 @@ test('watch', function(t) {
   del([fixtures('build'), fixtures('src/build')]).then(function () {
     exec('cp -R ' + fixtures('src/reduce') + ' ' + fixtures('src/build'), () => {
       let count = 0
-      reduce(require(fixtures('watch.config')))
-        .watch()
+      reduce.watch(require(fixtures('watch.config')))
         .on('done', function () {
           compare(
             t,
@@ -36,7 +35,7 @@ test('watch', function(t) {
           } else {
             this.close()
             t.end()
-            // bug: this.close() can not make the watcher die on linux
+            // FIXME: this.close() can not make the watcher die on linux
             process.exit(0)
           }
         })
