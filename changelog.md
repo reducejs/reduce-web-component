@@ -1,4 +1,18 @@
-<!-- c011626 1458185821000 -->
+<!-- 230a7bf 1458717777000 -->
+
+## [v0.6.0](https://github.com/reducejs/reduce-web-component/commit/230a7bf) (2016-03-23)
+
+* [[`f9c22e6`](https://github.com/reducejs/reduce-web-component/commit/f9c22e6)] fix testcases
+
+* [[`aaf2ad8`](https://github.com/reducejs/reduce-web-component/commit/aaf2ad8)] minor
+
+* [[`d116a43`](https://github.com/reducejs/reduce-web-component/commit/d116a43)] add test and doc
+
+* [[`6fa2257`](https://github.com/reducejs/reduce-web-component/commit/6fa2257)] minor
+
+* [[`bdc19c2`](https://github.com/reducejs/reduce-web-component/commit/bdc19c2)] gen deps file
+
+* [[`e7562b7`](https://github.com/reducejs/reduce-web-component/commit/e7562b7)] changelog
 
 ## [v0.5.0](https://github.com/reducejs/reduce-web-component/commit/c011626) (2016-03-17)
 
