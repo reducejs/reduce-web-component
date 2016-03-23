@@ -8,23 +8,20 @@ function bundle(opts) {
   if (typeof opts === 'string') {
     opts = require(path.resolve(opts))
   }
+  inputMap.create(opts)
   return reduce(Options.create(opts))
 }
 
-function watch(opts, id) {
+function watch(opts) {
   if (typeof opts === 'string') {
-    id = id || opts
     opts = require(path.resolve(opts))
   }
-  if (id) {
-    inputMap.createServer(id, opts)
-  }
+  inputMap.create(opts)
   return new Watch(Options.create(opts)).start()
 }
 
 module.exports = {
   bundle,
   watch,
-  getDeps: inputMap.getDeps,
 }
 

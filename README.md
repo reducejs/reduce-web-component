@@ -371,6 +371,11 @@ Listeners merged into both `options.js.on` and `options.css.on`.
 
 ```
 
+### options.map
+Specify the dependence map file path which will be generated after each bundle.
+
+Default is null, no file is written.
+
 **Events**
 
 * `.on('log', msg => {})`. Messages from plugins.
