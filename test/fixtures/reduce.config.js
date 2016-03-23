@@ -26,6 +26,8 @@ module.exports = {
     }
   },
 
+  map: fixtures('deps.js'),
+
   reduce: {
     basedir: fixtures('src/reduce'),
     paths: [fixtures('src/reduce/web_modules')],
