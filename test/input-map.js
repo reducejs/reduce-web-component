@@ -8,7 +8,7 @@ var src = fixtures.bind(null, 'src', 'reduce')
 test('inputMap', function(t) {
   var opts = require(fixtures('reduce.config'))
   return reduce.bundle(opts).then(function() {
-    data = fs.readFileSync(opts.map)
+    var data = fs.readFileSync(opts.map)
     fs.unlinkSync(opts.map)
     var o = JSON.parse(data)
     t.same(
