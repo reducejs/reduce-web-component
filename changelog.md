@@ -1,4 +1,14 @@
-<!-- 230a7bf 1458717777000 -->
+<!-- c3265d5 1458802189000 -->
+
+## [v0.6.1](https://github.com/reducejs/reduce-web-component/commit/c3265d5) (2016-03-24)
+
+* [[`5b995da`](https://github.com/reducejs/reduce-web-component/commit/5b995da)] minor
+
+* [[`3126ca7`](https://github.com/reducejs/reduce-web-component/commit/3126ca7)] add param basedir
+
+* [[`5dea518`](https://github.com/reducejs/reduce-web-component/commit/5dea518)] relative path in deps file
+
+* [[`44f4463`](https://github.com/reducejs/reduce-web-component/commit/44f4463)] changelog
 
 ## [v0.6.0](https://github.com/reducejs/reduce-web-component/commit/230a7bf) (2016-03-23)
 
