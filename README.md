@@ -372,9 +372,11 @@ Listeners merged into both `options.js.on` and `options.css.on`.
 ```
 
 ### options.map
-Specify the dependence map file path which will be generated after each bundle.
+Type: `String`, `Object`
 
-Default is null, no file is written.
+map or map.file: specify the dependence map file path which will be generated after each bundle.
+
+map.basedir: specify the base directory of relative paths in dependence map. Default is process.cwd().
 
 **Events**
 

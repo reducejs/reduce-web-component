@@ -7,25 +7,28 @@ var src = fixtures.bind(null, 'src', 'reduce')
 
 test('inputMap', function(t) {
   var opts = require(fixtures('reduce.config'))
-  opts.map = fixtures('deps.js')
+  opts.map = {
+    basedir: src(),
+    file: fixtures('deps.js'),
+  }
   return reduce.bundle(opts).then(function() {
-    var data = fs.readFileSync(opts.map)
-    fs.unlinkSync(opts.map)
+    var data = fs.readFileSync(opts.map.file)
+    fs.unlinkSync(opts.map.file)
     var o = JSON.parse(data)
     t.same(
-      o[src('page/hi/index.css')],
+      o['page/hi/index.css'],
       ['common.css', 'page/hi/index.css']
     )
     t.same(
-      o[src('page/hello/index.css')],
+      o['page/hello/index.css'],
       ['common.css', 'page/hello/index.css']
     )
     t.same(
-      o[src('page/hi/index.js')],
+      o['page/hi/index.js'],
       ['common.js', 'page/hi/index.js']
     )
     t.same(
-      o[src('page/hello/index.js')],
+      o['page/hello/index.js'],
       ['common.js', 'page/hello/index.js']
     )
   })
