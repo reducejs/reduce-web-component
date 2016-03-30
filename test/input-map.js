@@ -16,7 +16,7 @@ test('inputMap', function(t) {
     fs.unlinkSync(opts.map.file)
     var o = JSON.parse(data)
     t.same(
-      o['page/hi/index.js'],
+      o['page/hi'],
       {
         css: [
           'common.css',
@@ -29,7 +29,7 @@ test('inputMap', function(t) {
       }
     )
     t.same(
-      o['page/hello/index.js'],
+      o['page/hello'],
       {
         css: [
           'common.css',
