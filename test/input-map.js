@@ -16,20 +16,30 @@ test('inputMap', function(t) {
     fs.unlinkSync(opts.map.file)
     var o = JSON.parse(data)
     t.same(
-      o['page/hi/index.css'],
-      ['common.css', 'page/hi/index.css']
-    )
-    t.same(
-      o['page/hello/index.css'],
-      ['common.css', 'page/hello/index.css']
-    )
-    t.same(
       o['page/hi/index.js'],
-      ['common.js', 'page/hi/index.js']
+      {
+        css: [
+          'common.css',
+          'page/hi/index.css',
+        ],
+        js: [
+          'common.js',
+          'page/hi/index.js',
+        ],
+      }
     )
     t.same(
       o['page/hello/index.js'],
-      ['common.js', 'page/hello/index.js']
+      {
+        css: [
+          'common.css',
+          'page/hello/index.css',
+        ],
+        js: [
+          'common.js',
+          'page/hello/index.js',
+        ],
+      }
     )
   })
 })
