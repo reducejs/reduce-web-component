@@ -56,7 +56,7 @@ module.exports = 'hello, ' + require('world')
 
 ```
 
-**The `hi` component**
+**The `hi` page**
 
 * Script entry (`page/hi/index.js`)
 ```js
