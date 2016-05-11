@@ -10,10 +10,6 @@ module.exports = {
   map: ['reduce.map.json', 'page/**/index.+(jsx|css)'],
 
   reduce: {
-    transform: [
-      ['babelify', {presets: ["es2015", "react"]}],
-    ],
-    extensions: '.jsx',
     basedir: path.resolve(__dirname, 'src'),
   },
 
@@ -33,6 +29,12 @@ module.exports = {
   dest: 'build',
 
   js: {
+    reduce: {
+      transform: [
+        ['babelify', {presets: ["es2015", "react"]}],
+      ],
+      extensions: '.jsx',
+    },
     entries: 'page/**/index.jsx',
     bundleOptions: 'bundle.js',
   },
