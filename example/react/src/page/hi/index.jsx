@@ -1,5 +1,5 @@
-var React = require('react');
-var earth = require('earth');
+var React = require('react')
+var earth = require('earth')
 
 var Hi = React.createClass({
   displayName: 'Hi',
@@ -8,8 +8,6 @@ var Hi = React.createClass({
       <div className="commentBox">
         Hi, {earth}!
       </div>
-    );
-  }
-});
-
-export default Hi;
+    )
+  },
+})

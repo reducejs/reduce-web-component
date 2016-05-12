@@ -1,4 +1,4 @@
-var React = require('react');
+var React = require('react')
 
 var Hello = React.createClass({
   displayName: 'Hello',
@@ -7,8 +7,7 @@ var Hello = React.createClass({
       <div className="commentBox">
         Hello, world!
       </div>
-    );
+    )
   }
-});
+})
 
-export default Hello;
