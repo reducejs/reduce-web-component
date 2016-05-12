@@ -1,0 +1,5 @@
+@external "round";
+@import "helper/color";
+.world {
+  color: $red;
+}

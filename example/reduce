@@ -1,0 +1,28 @@
+#!/usr/bin/env node
+
+const del = require('del')
+const path = require('path')
+const reduce = require('reduce-web-component')
+
+var args = process.argv.slice(2)
+var i = args.indexOf('-w')
+if (i === -1) {
+  i = args.indexOf('--watch')
+}
+var bundle = reduce.bundle
+if (i > -1) {
+  args.splice(i, 1)
+  bundle = reduce.watch
+}
+
+var target = args[0]
+target = target || 'single-bundle'
+var root = path.resolve(target)
+
+del(root + '/build').then(function () {
+  return bundle(root + '/reduce.config.js')
+})
+.then(function () {
+  console.log('Done!')
+})
+

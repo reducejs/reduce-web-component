@@ -1,5 +1,3 @@
-'use strict'
-
 const path = require('path')
 
 module.exports = {
@@ -7,26 +5,11 @@ module.exports = {
     return path.dirname(jsFile) + '/index.css'
   },
 
-  map: ['reduce.map.json', 'page/**/index.+(js|css)'],
-
   reduce: {
-    basedir: path.resolve(__dirname, 'src'),
+    basedir: path.join(__dirname, 'src'),
+    paths: path.join(__dirname, 'src', 'component'),
   },
-
-  on: {
-    log: console.log.bind(console),
-    error: function (err) {
-      console.error(err.stack)
-    },
-    'reduce.end': function (bytes, duration) {
-      console.log(
-        '[%s done] %d bytes written (%d seconds)',
-        this._type, bytes, (duration / 1000).toFixed(2)
-      )
-    },
-  },
-
-  dest: 'build',
+  dest: path.join(__dirname, 'build'),
 
   js: {
     entries: 'page/**/index.js',

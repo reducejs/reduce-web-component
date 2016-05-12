@@ -1,8 +1,6 @@
-'use strict'
-
 const path = require('path')
-const fixtures = path.resolve.bind(path, __dirname, 'src')
 const Clean = require('clean-remains')
+const csi = require('ansi-escape')
 
 module.exports = {
   getStyle: function (jsFile) {
@@ -10,17 +8,17 @@ module.exports = {
   },
 
   reduce: {
-    basedir: fixtures(),
-    paths: [fixtures('web_modules')],
+    basedir: path.join(__dirname, 'src'),
+    paths: path.join(__dirname, 'src', 'web_modules'),
   },
 
   on: {
     log: console.log.bind(console),
     error: function (err) {
-      console.log(err.stack)
+      console.error(err.stack)
     },
     'common.map': function (map) {
-      console.log('[%s bundles] %s', this._type.toUpperCase(), Object.keys(map).join(', '))
+      console.log(csi.green.escape('[%s bundles] %s'), this._type.toUpperCase(), Object.keys(map).join(', '))
     },
     'reduce.end': function (bytes, duration) {
       console.log(
@@ -40,37 +38,26 @@ module.exports = {
       plugin: 'dedupify',
     },
     plugin: [
-      ['dest', 'build'],
-      [Clean([])],
+      ['dest', path.join(__dirname, 'build')],
+      Clean([]),
     ],
   },
 
   css: {
     //entries: 'page/**/index.css',
-    reduce: {
-      atRuleName: 'external',
-    },
     bundleOptions: {
       groups: 'page/**/index.css',
       common: 'common.css',
     },
     plugin: [
-      ['dest', 'build'],
-      [Clean([])],
+      ['dest', path.join(__dirname, 'build')],
+      Clean([]),
     ],
   },
 
   watch: {
-    js: {
-      entryGlob: 'page/**/index.js',
-      // do not watch files under node_modules
-      ignoreWatch: true,
-    },
-    css: {
-      entryGlob: 'page/**/index.css',
-      // do not watch files under node_modules
-      ignoreWatch: true,
-    },
+    js: { entryGlob: 'page/**/index.js' },
+    css: { entryGlob: 'page/**/index.css' },
   },
 }
 

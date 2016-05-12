@@ -1,0 +1,22 @@
+{
+  "page/hello": {
+    "js": [
+      "common.js",
+      "page/hello/index.js"
+    ],
+    "css": [
+      "common.css",
+      "page/hello/index.css"
+    ]
+  },
+  "page/hi": {
+    "js": [
+      "common.js",
+      "page/hi/index.js"
+    ],
+    "css": [
+      "common.css",
+      "page/hi/index.css"
+    ]
+  }
+}
