@@ -42,6 +42,7 @@ module.exports = {
     plugin: [
       // 可以用字符串'dest'来代表一个特殊的插件
       // 等同于gulp.dest，可用来将文件写到磁盘
+      // 具体参数请参见https://github.com/gulpjs/vinyl-fs#destfolder-options
       ['dest', path.join(__dirname, 'build')],
       // 这个插件可以记录文件历史，从而将之前产生过但这次不在产生列表中的文件删除
       Clean([]),
@@ -58,6 +59,7 @@ module.exports = {
     plugin: [
       // 可以用字符串'dest'来代表一个特殊的插件
       // 类似于gulp.dest，可用来将文件写到磁盘，同时处理CSS中url引用的资源
+      // 具体参数请参见https://github.com/reducejs/reduce-css#reducedestoutfolder-opts-urlopts
       ['dest', path.join(__dirname, 'build')],
       // 这个插件可以记录文件历史，从而将之前产生过但这次不在产生列表中的文件删除
       Clean([]),
