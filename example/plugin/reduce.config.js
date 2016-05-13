@@ -9,7 +9,6 @@ module.exports = {
 
   reduce: {
     basedir: path.join(__dirname, 'src'),
-    paths: path.join(__dirname, 'src', 'web_modules'),
   },
 
   on: {
