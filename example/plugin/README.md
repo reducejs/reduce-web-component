@@ -94,5 +94,6 @@ module.exports = {
 [depsify]: https://github.com/reducejs/depsify
 [watchify2]: https://github.com/reducejs/watchify2
 [common-bundle]: https://github.com/reducejs/common-bundle
+[gulp-rename]: https://github.com/hparra/gulp-rename
 [reduce-css-postcss]: https://github.com/reducejs/reduce-css-postcss
 
