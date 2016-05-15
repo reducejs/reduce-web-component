@@ -37,6 +37,8 @@ module.exports = {
       plugin: 'dedupify',
     },
     plugin: [
+      'vinyl-buffer',
+      'gulp-uglify',
       ['dest', path.join(__dirname, 'build')],
       Clean([]),
     ],
@@ -49,6 +51,8 @@ module.exports = {
       common: 'common.css',
     },
     plugin: [
+      'vinyl-buffer',
+      'gulp-uglifycss',
       ['dest', path.join(__dirname, 'build')],
       Clean([]),
     ],
