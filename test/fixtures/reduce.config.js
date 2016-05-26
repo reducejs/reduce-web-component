@@ -51,7 +51,7 @@ module.exports = {
       resolve: styleResolve,
     },
     plugin: [
-      [require('reduce-css').dest, fixtures('build')],
+      ['dest', fixtures('build')],
     ],
   },
 }
