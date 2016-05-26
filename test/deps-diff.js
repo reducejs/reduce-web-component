@@ -12,7 +12,7 @@ test('added', function(t) {
   t.same(
     diff(
       [
-        { dependenciesFilter: '/a', deps: ['/b', '/c'] },
+        { file: '/a', deps: ['/b', '/c'] },
       ],
       []
     ),
@@ -22,10 +22,10 @@ test('added', function(t) {
   t.same(
     diff(
       [
-        { dependenciesFilter: '/a', deps: ['/b', '/c'] },
+        { file: '/a', deps: ['/b', '/c'] },
       ],
       [
-        { dependenciesFilter: '/a', deps: ['/b'] },
+        { file: '/a', deps: ['/b'] },
       ]
     ),
     [],
@@ -39,7 +39,7 @@ test('deleted', function(t) {
     diff(
       [],
       [
-        { dependenciesFilter: '/a', deps: ['/b', '/c'] },
+        { file: '/a', deps: ['/b', '/c'] },
       ]
     ),
     ['/a'],
@@ -48,10 +48,10 @@ test('deleted', function(t) {
   t.same(
     diff(
       [
-        { dependenciesFilter: '/a', deps: ['/b'] },
+        { file: '/a', deps: ['/b'] },
       ],
       [
-        { dependenciesFilter: '/a', deps: ['/b', '/c'] },
+        { file: '/a', deps: ['/b', '/c'] },
       ]
     ),
     ['/a'],
@@ -64,11 +64,11 @@ test('multiple items for the same file', function(t) {
   t.same(
     diff(
       [
-        { dependenciesFilter: '/a', deps: ['/b'] },
-        { dependenciesFilter: '/a', deps: ['/c'] },
+        { file: '/a', deps: ['/b'] },
+        { file: '/a', deps: ['/c'] },
       ],
       [
-        { dependenciesFilter: '/a', deps: ['/b'] },
+        { file: '/a', deps: ['/b'] },
       ]
     ),
     [],
@@ -77,11 +77,11 @@ test('multiple items for the same file', function(t) {
   t.same(
     diff(
       [
-        { dependenciesFilter: '/a', deps: ['/b'] },
+        { file: '/a', deps: ['/b'] },
       ],
       [
-        { dependenciesFilter: '/a', deps: ['/b'] },
-        { dependenciesFilter: '/a', deps: ['/c'] },
+        { file: '/a', deps: ['/b'] },
+        { file: '/a', deps: ['/c'] },
       ]
     ),
     ['/a'],

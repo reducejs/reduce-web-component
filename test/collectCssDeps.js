@@ -24,7 +24,7 @@ test('getStyle', function(tt) {
     let expected = []
     if (getStyle) {
       expected = [{
-        dependenciesFilter: '/component/a/index.css',
+        file: '/component/a/index.css',
         deps: ['/component/b/index.css', '/component/c/index.css'],
       }]
     }

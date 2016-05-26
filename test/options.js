@@ -93,12 +93,12 @@ test('processPlugins', function (t) {
   var reduce = require('reduce-js')
   t.same(
     util.processPlugins({ plugin: [['dest', 'x']] }, reduce),
-    { plugin: [[reduce.dest, 'x']] }
+    { plugin: [['dest', 'x']] }
   )
 
   t.same(
     util.processPlugins({ dest: 'x' }, reduce),
-    { plugin: [[reduce.dest, 'x']], dest: 'x' }
+    { plugin: [['dest', 'x']], dest: 'x' }
   )
 
   t.end()
