@@ -1,4 +1,50 @@
-<!-- c3265d5 1458802189000 -->
+<!-- feb1306 1464265292000 -->
+
+## [v0.7.0](https://github.com/reducejs/reduce-web-component/commit/feb1306) (2016-05-26)
+
+* [[`eebe963`](https://github.com/reducejs/reduce-web-component/commit/eebe963)] travis: 5
+
+* [[`3d2f1cf`](https://github.com/reducejs/reduce-web-component/commit/3d2f1cf)] update reduce-js and reduce-css
+
+* [[`0e0e657`](https://github.com/reducejs/reduce-web-component/commit/0e0e657)] example, postcss
+
+* [[`e09e0b2`](https://github.com/reducejs/reduce-web-component/commit/e09e0b2)] example: transform
+
+## [v0.6.3](https://github.com/reducejs/reduce-web-component/commit/24c0c95) (2016-05-15)
+
+* [[`98b9092`](https://github.com/reducejs/reduce-web-component/commit/98b9092)] example: plugin
+
+* [[`f22ba11`](https://github.com/reducejs/reduce-web-component/commit/f22ba11)] support String plugin option
+
+* [[`d209b30`](https://github.com/reducejs/reduce-web-component/commit/d209b30)] add link to reduce.dest
+
+* [[`c0e306d`](https://github.com/reducejs/reduce-web-component/commit/c0e306d)] gitignore
+
+* [[`c7c086e`](https://github.com/reducejs/reduce-web-component/commit/c7c086e)] remove node_modules
+
+* [[`4ac9730`](https://github.com/reducejs/reduce-web-component/commit/4ac9730)] example: plugin
+
+* [[`e3a0cb8`](https://github.com/reducejs/reduce-web-component/commit/e3a0cb8)] fix links
+
+* [[`cb667bf`](https://github.com/reducejs/reduce-web-component/commit/cb667bf)] more examples
+
+* [[`2ca0f0b`](https://github.com/reducejs/reduce-web-component/commit/2ca0f0b)] Fix react example
+
+* [[`4243253`](https://github.com/reducejs/reduce-web-component/commit/4243253)] bugfix
+
+* [[`dc1c99f`](https://github.com/reducejs/reduce-web-component/commit/dc1c99f)] add react example
+
+* [[`30a8b27`](https://github.com/reducejs/reduce-web-component/commit/30a8b27)] Fix small oversight
+
+* [[`2087f64`](https://github.com/reducejs/reduce-web-component/commit/2087f64)] 0.6.2
+
+* [[`4613557`](https://github.com/reducejs/reduce-web-component/commit/4613557)] use dir as key
+
+* [[`e95b601`](https://github.com/reducejs/reduce-web-component/commit/e95b601)] modify test
+
+* [[`883d92c`](https://github.com/reducejs/reduce-web-component/commit/883d92c)] adjust deps file format
+
+* [[`c3fd83d`](https://github.com/reducejs/reduce-web-component/commit/c3fd83d)] changelog
 
 ## [v0.6.1](https://github.com/reducejs/reduce-web-component/commit/c3265d5) (2016-03-24)
 
