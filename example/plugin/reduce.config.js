@@ -16,8 +16,12 @@ module.exports = {
     error: function (err) {
       console.error(err.stack)
     },
-    'common.map': function (map) {
-      console.log(csi.green.escape('[%s bundles] %s'), this._type.toUpperCase(), Object.keys(map).join(', '))
+    'common.map': function (o) {
+      console.log(
+        csi.green.escape('[%s bundles] %s'),
+        this._type.toUpperCase(),
+        Object.keys(o.bundles).join(', ')
+      )
     },
     'reduce.end': function (bytes, duration) {
       console.log(
@@ -37,7 +41,7 @@ module.exports = {
       plugin: 'dedupify',
     },
     plugin: [
-      'vinyl-buffer',
+      //'vinyl-buffer',
       'gulp-uglify',
       ['dest', path.join(__dirname, 'build')],
       Clean([]),
@@ -51,8 +55,8 @@ module.exports = {
       common: 'common.css',
     },
     plugin: [
-      'vinyl-buffer',
-      'gulp-uglifycss',
+      //'vinyl-buffer',
+      //'gulp-uglifycss',
       ['dest', path.join(__dirname, 'build')],
       Clean([]),
     ],
