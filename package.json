@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/reducejs/reduce-web-component#readme",
   "dependencies": {
-    "deps-patch": "^0.1.0",
+    "deps-patch": "^0.2.0",
     "multimatch": "^2.1.0",
     "reduce-css": "^6.0.0",
     "reduce-js": "^10.0.1",
