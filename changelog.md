@@ -1,4 +1,10 @@
-<!-- feb1306 1464265292000 -->
+<!-- b8099bc 1464664477000 -->
+
+## [v0.7.1](https://github.com/reducejs/reduce-web-component/commit/b8099bc) (2016-05-31)
+
+* [[`f2ade95`](https://github.com/reducejs/reduce-web-component/commit/f2ade95)] update deps-patch
+
+* [[`a105550`](https://github.com/reducejs/reduce-web-component/commit/a105550)] changelog
 
 ## [v0.7.0](https://github.com/reducejs/reduce-web-component/commit/feb1306) (2016-05-26)
 
