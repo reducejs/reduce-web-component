@@ -31,11 +31,6 @@ module.exports = {
     paths: [fixtures('src/build/web_modules')],
   },
 
-  watch: {
-    js: { entryGlob: 'page/**/index.js' },
-    css: { entryGlob: 'page/**/index.css' },
-  },
-
   on: {
     error: function (err) {
       console.log(err.stack)
@@ -55,6 +50,10 @@ module.exports = {
       ['dest', fixtures('build')],
       [Clean([])],
     ],
+    watch: {
+      entryGlob: 'page/**/index.js',
+    },
+
   },
 
   css: {
@@ -70,6 +69,10 @@ module.exports = {
       ['dest', fixtures('build')],
       [Clean([])],
     ],
+    watch: {
+      entryGlob: 'page/**/index.css',
+    },
+
   },
 }
 
