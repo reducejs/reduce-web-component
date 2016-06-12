@@ -24,8 +24,9 @@ module.exports = {
       groups: 'page/**/index.css',
       common: 'common.css',
     },
-    dest: [path.join(__dirname, 'build'), null, {
+    dest: [path.join(__dirname, 'build'), {
       maxSize: 5,
+      name: '[name].[hash]',
       assetOutFolder: path.join(__dirname, 'build', 'assets'),
     }],
   },

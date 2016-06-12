@@ -22,7 +22,7 @@ test('watch', function(t) {
   del([fixtures('build'), fixtures('src/build')]).then(function () {
     exec('cp -R ' + fixtures('src/reduce') + ' ' + fixtures('src/build'), () => {
       let count = 0
-      reduce.watch(require(fixtures('watch.config')))
+      reduce(require(fixtures('watch.config')))
         .on('done', function () {
           compare(
             t,

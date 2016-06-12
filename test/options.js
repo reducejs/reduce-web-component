@@ -1,158 +1,253 @@
 'use strict'
 
-const util = require('../lib/options')
+const create = require('../lib/createOptions')
 const test = require('tap').test
 
+test('default', function (t) {
+  let o
+
+  o = create()
+  t.same(o.js.reduce, { cache: {}, packageCache: {} }, 'default js options')
+  t.same(o.css.reduce, { cache: {}, packageCache: {} }, 'default css options')
+
+  o = create({ css: false })
+  t.equal(o.css, undefined, 'css disabled')
+
+  o = create({ js: false })
+  t.equal(o.js, undefined, 'js disabled')
+
+  t.end()
+})
+
+test('reduce', function (t) {
+  let o
+
+  o = create({
+    reduce: {
+      basedir: '/path/to/src',
+      paths: '/path/to/lib',
+    },
+    js: {
+      reduce: { paths: '/path/to/modules' },
+    },
+    css: {
+      reduce: { paths: '/path/to/modules' },
+    },
+  })
+  t.same(o.js.reduce, {
+    paths: [ '/path/to/modules', '/path/to/lib' ],
+    basedir: '/path/to/src',
+    cache: {},
+    packageCache: {},
+  }, 'js.reduce')
+  t.same(o.css.reduce, {
+    paths: [ '/path/to/modules', '/path/to/lib' ],
+    basedir: '/path/to/src',
+    cache: {},
+    packageCache: {},
+    resolve: {
+      paths: [ '/path/to/modules', '/path/to/lib' ],
+    },
+  }, 'css.reduce')
+
+  t.end()
+})
+
+test('entries', function (t) {
+  let o
+
+  o = create({
+    js: {
+      entries: 'page/**/index.js',
+    },
+    css: {
+      entries: [ 'page/**/index.css' ],
+    },
+  })
+  t.equal(o.js.entries, 'page/**/index.js', 'js.entries')
+  t.same(o.css.entries, [ 'page/**/index.css' ], 'css.entries')
+
+  t.end()
+})
+
 test('plugin', function (t) {
-  t.same(
-    util.plugin({ plugin: ['x'] }, './delog'),
-    {
-      plugin: [ 'x', ['./delog'] ],
-    },
-    'plugin exists'
-  )
+  let o
 
-  t.same(
-    util.plugin({}, require('../lib/delog')),
-    {
-      plugin: [ [require('../lib/delog')] ],
-    },
-    'function'
-  )
+  function plugin() {}
 
-  t.same(
-    util.plugin({}, './delog'),
-    {
-      plugin: [ ['./delog'] ],
+  o = create({
+    plugin: [[plugin, 1, 2]],
+    js: {
+      plugin: [plugin],
     },
-    'string'
-  )
-
-  t.same(
-    util.plugin({}, './delog', 1),
-    {
-      plugin: [
-        ['./delog', 1],
-      ],
+    css: {
+      plugin: [[plugin]],
     },
-    'string, single arg'
-  )
-
-  t.same(
-    util.plugin({}, './delog', [1, 2]),
-    {
-      plugin: [
-        ['./delog', 1, 2],
-      ],
-    },
-    'string, args'
-  )
+  })
+  t.same(o.js.plugin, [
+    require('../lib/timer'),
+    plugin,
+    [plugin, 1, 2],
+  ], 'js.plugin')
+  t.same(o.css.plugin, [
+    require('../lib/timer'),
+    [plugin],
+    [plugin, 1, 2],
+  ], 'css.plugin')
 
   t.end()
 })
 
-test('merge', function (t) {
-  t.same(
-    util.merge({}),
-    {
-      reduce: { cache: {}, packageCache: {}, paths: [] },
+test('on', function (t) {
+  let o
+
+  function cb1() {}
+  function cb2() {}
+  o = create({
+    on: { x: cb1, y: cb2 },
+    js: {
+      on: { x: cb2 },
     },
-    'default'
-  )
-
-  t.same(
-    util.merge({ reduce: { x: 1 } }, { reduce: { x: 2, y: 2 } }).reduce,
-    { cache: {}, packageCache: {}, paths: [], x: 1, y: 2 },
-    'cascading'
-  )
-
-  t.same(
-    util.merge({ reduce: { paths: [1] } }, { reduce: { paths: [2] } }).reduce.paths,
-    [1, 2],
-    'paths'
-  )
-
-  var cb1 = function () {}
-  var cb2 = function () {}
-  t.same(
-    util.merge({ on: { error: cb1 } }, { on: { error: cb2, log: cb2 } }).on,
-    { error: [cb1, cb2], log: [cb2] },
-    'on'
-  )
-
-  t.same(
-    util.merge({}, { dest: 'build' }).dest,
-    'build',
-    'dest'
-  )
+    css: {
+      on: { y: cb1 },
+    },
+  })
+  t.same(o.js.on, { x: [cb2, cb1], y: [cb2] }, 'js.on')
+  t.same(o.css.on, { x: [cb1], y: [cb1, cb2] }, 'css.on')
 
   t.end()
 })
 
-test('processPlugins', function (t) {
-  var reduce = require('reduce-js')
-  t.same(
-    util.processPlugins({ plugin: [['dest', 'x']] }, reduce),
-    { plugin: [['dest', 'x']] }
-  )
+test('dest', function (t) {
+  let o
 
-  t.same(
-    util.processPlugins({ dest: 'x' }, reduce),
-    { plugin: [['dest', 'x']], dest: 'x' }
-  )
+  o = create({ dest: 'build' })
+  t.same(o.js.plugin, [
+    require('../lib/timer'),
+    ['dest', 'build'],
+  ], 'common js.plugin.dest')
+  t.same(o.css.plugin, [
+    require('../lib/timer'),
+    ['dest', 'build'],
+  ], 'common css.plugin.dest')
 
-  t.end()
-})
-
-test('css', function (t) {
-  t.same(
-    util.css(
-      { reduce: { resolve: { paths: 1 }, paths: [2] } }
-    ).reduce,
-    {
-      paths: [2],
-      resolve: { paths: [1, 2] },
-      cache: {},
-      packageCache: {},
-    }
-  )
+  o = create({
+    js: { dest: 'build' },
+    css: { dest: ['build', 1] },
+  })
+  t.same(o.js.plugin, [
+    require('../lib/timer'),
+    ['dest', 'build'],
+  ], 'js.plugin.dest')
+  t.same(o.css.plugin, [
+    require('../lib/timer'),
+    ['dest', 'build', 1],
+  ], 'css.plugin.dest')
 
   t.end()
 })
 
-test('js', function (t) {
-  t.same(
-    util.js({ reduce: { paths: [1] } }, { reduce: { paths: [2] } }).reduce,
-    {
-      paths: [1, 2],
-      cache: {},
-      packageCache: {},
-    }
-  )
+test('bundleOptions', function (t) {
+  let o
+
+  let opts1 = {}
+  let opts2 = {}
+  o = create({
+    bundleOptions: opts1,
+    js: { bundleOptions: opts2 },
+  })
+  t.equal(o.js.bundleOptions, opts1, 'js.bundleOptions')
+  t.equal(o.css.bundleOptions, opts1, 'css.bundleOptions')
 
   t.end()
 })
 
-test('create', function (t) {
-  t.same(
-    util.create({}).css.reduce,
-    { cache: {}, packageCache: {}, paths: [], resolve: { paths: [] } }
-  )
+test('watch', function (t) {
+  let o
 
-  t.same(
-    util.create({}).js.reduce,
-    { cache: {}, packageCache: {}, paths: [] }
-  )
+  let opts1 = {}
+  let opts2 = {}
+  o = create({
+    js: { watch: opts1 },
+    css: { watch: opts2 },
+  })
+  t.equal(o.js.watch, opts1, 'js.watch')
+  t.equal(o.css.watch, opts2, 'css.watch')
 
-  t.same(
-    util.create({ css: false }).css,
-    false
-  )
+  o = create({
+    watch: opts2,
+    js: { watch: opts1 },
+  })
+  t.equal(o.js.watch, opts2, 'js.watch')
+  t.equal(o.css.watch, opts2, 'css.watch')
 
-  t.same(
-    util.create({ js: false }).js,
-    false
-  )
+  t.end()
+})
+
+test('env', function (t) {
+  let o
+
+  function plugin() {}
+  function log() {}
+
+  o = create({
+    on: { error: log },
+    dest: 'build',
+    plugin: plugin,
+
+    js: {
+      plugin: [[plugin, 1]],
+    },
+    env: {
+      development: {
+        dest: 'dist',
+        on: { log: log },
+        js: { plugin: [[plugin, 2]] },
+      },
+    },
+  })
+
+  t.same(o.js.plugin, [
+    require('../lib/timer'),
+    [plugin, 1],
+    plugin,
+    [plugin, 2],
+    ['dest', 'dist'],
+  ], 'js.plugin')
+  t.same(o.js.on, {
+    error: [ log ],
+    log: [ log ],
+  }, 'js.on')
+
+  process.env.NODE_ENV = 'product'
+  o = create({
+    on: { error: log },
+    dest: 'build',
+    plugin: plugin,
+
+    js: {
+      plugin: [[plugin, 1]],
+    },
+    env: {
+      product: {
+        dest: 'dist',
+        on: { log: log },
+        js: { plugin: [[plugin, 2]] },
+      },
+    },
+  })
+
+  t.same(o.js.plugin, [
+    require('../lib/timer'),
+    [plugin, 1],
+    plugin,
+    [plugin, 2],
+    ['dest', 'dist'],
+  ], 'js.plugin')
+  t.same(o.js.on, {
+    error: [ log ],
+    log: [ log ],
+  }, 'js.on')
 
   t.end()
 })

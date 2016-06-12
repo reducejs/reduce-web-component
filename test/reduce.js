@@ -9,7 +9,7 @@ const fixtures = path.resolve.bind(path, __dirname, 'fixtures')
 
 test('multiple bundles', function(t) {
   return del(fixtures('build'))
-    .then(() => reduce.bundle(fixtures('reduce.config')))
+    .then(() => reduce(fixtures('reduce.config')))
     .then(function () {
       compare(
         t,
