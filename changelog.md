@@ -1,4 +1,16 @@
-<!-- b8099bc 1464664477000 -->
+<!-- 8fd53fa 1465723499000 -->
+
+## [v0.8.0](https://github.com/reducejs/reduce-web-component/commit/8fd53fa) (2016-06-12)
+
+* [[`ac2f0a8`](https://github.com/reducejs/reduce-web-component/commit/ac2f0a8)] fix example link
+
+* [[`2b429f5`](https://github.com/reducejs/reduce-web-component/commit/2b429f5)] readme
+
+* [[`d8bed42`](https://github.com/reducejs/reduce-web-component/commit/d8bed42)] example
+
+* [[`a316175`](https://github.com/reducejs/reduce-web-component/commit/a316175)] Support env config
+
+* [[`16030a5`](https://github.com/reducejs/reduce-web-component/commit/16030a5)] changelog
 
 ## [v0.7.1](https://github.com/reducejs/reduce-web-component/commit/b8099bc) (2016-05-31)
 
